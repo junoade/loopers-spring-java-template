@@ -98,7 +98,7 @@ public class UserOrderProductFacade {
         boolean hasOutOfStockCase = !stockResult.failedLines().isEmpty();
         if(hasOutOfStockCase) {
             // orderService.updateOrderAsPartialSuccess(orderModel, stockResult.requiringPrice() , stockResult.errorPrice());
-            throw new CoreException(ErrorType.BAD_REQUEST, "포인트가 부족합니다. 다시 확인해주세요");
+            throw new CoreException(ErrorType.BAD_REQUEST, "재고가 부족합니다. 다시 확인해주세요");
         }
 
         // orderService.updateOrderAsSuccess(orderModel, stockResult.requiringPrice());
