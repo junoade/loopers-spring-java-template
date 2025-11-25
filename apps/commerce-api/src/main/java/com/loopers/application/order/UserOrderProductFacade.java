@@ -12,12 +12,10 @@ import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -42,32 +40,6 @@ public class UserOrderProductFacade {
                 result.successLines(),
                 result.failedLines()
         );
-    }
-
-    /**
-     * retry-wrapper
-     * @param orderCommand
-     * @return
-     */
-    @Transactional
-    public OrderResult.PlaceOrderResult placeOrderWithRetry(OrderCommand.Order orderCommand) {
-        int maxRetry = 3;
-
-        for (int i = 0; i < maxRetry; i++) {
-            try {
-                return placeOrder(orderCommand);
-            } catch (CannotAcquireLockException e) {
-                log.warn("Deadlock detected. retry={}", i + 1);
-                try {
-                    Thread.sleep(10L * (i + 1)); // backoff
-                } catch (InterruptedException e2) {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException(e2);
-                }
-            }
-        }
-
-        throw new CoreException(ErrorType.BAD_REQUEST, "일시적인 오류입니다. 다시 시도해주세요.");
     }
 
     /**
@@ -98,7 +70,7 @@ public class UserOrderProductFacade {
         boolean hasOutOfStockCase = !stockResult.failedLines().isEmpty();
         if(hasOutOfStockCase) {
             // orderService.updateOrderAsPartialSuccess(orderModel, stockResult.requiringPrice() , stockResult.errorPrice());
-            throw new CoreException(ErrorType.BAD_REQUEST, "포인트가 부족합니다. 다시 확인해주세요");
+            throw new CoreException(ErrorType.BAD_REQUEST, "재고가 부족합니다. 다시 확인해주세요");
         }
 
         // orderService.updateOrderAsSuccess(orderModel, stockResult.requiringPrice());
