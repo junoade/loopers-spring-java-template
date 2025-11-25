@@ -57,7 +57,7 @@ public class OrderV1Dto {
                     .stream()
                     .map(OrderLineResponse::from)
                     .toList();
-            List<OrderLineResponse> failedLines = preOrderResult.successLines()
+            List<OrderLineResponse> failedLines = preOrderResult.failedLines()
                     .stream()
                     .map(OrderLineResponse::from)
                     .toList();
@@ -85,7 +85,7 @@ public class OrderV1Dto {
                     .stream()
                     .map(OrderLineResponse::from)
                     .toList();
-            List<OrderLineResponse> failedLines = placeOrderResult.successLines()
+            List<OrderLineResponse> failedLines = placeOrderResult.failedLines()
                     .stream()
                     .map(OrderLineResponse::from)
                     .toList();
