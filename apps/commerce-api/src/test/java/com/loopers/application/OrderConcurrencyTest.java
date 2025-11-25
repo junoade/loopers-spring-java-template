@@ -2,6 +2,7 @@ package com.loopers.application;
 
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.UserOrderProductFacade;
+import com.loopers.application.order.UserOrderProductRetry;
 import com.loopers.domain.brand.BrandModel;
 import com.loopers.domain.brand.BrandRepository;
 import com.loopers.domain.brand.BrandStatus;
@@ -35,6 +36,9 @@ public class OrderConcurrencyTest {
 
     @Autowired
     private UserOrderProductFacade userOrderProductFacade;
+
+    @Autowired
+    private UserOrderProductRetry userOrderProductRetry;
 
     @Autowired
     private UserRepository userRepository;
@@ -108,8 +112,7 @@ public class OrderConcurrencyTest {
                             List.of(line)
                     );
 
-                    // userOrderProductFacade.placeOrder(command);
-                    userOrderProductFacade.placeOrderWithRetry(command);
+                    userOrderProductRetry.placeOrderWithRetry(command);
                     successCount.incrementAndGet();
                 } catch (CoreException e) {
                     // 포인트 부족 등
@@ -138,12 +141,12 @@ public class OrderConcurrencyTest {
 
     @Test
     @DisplayName("재고 동시성 테스트 - 동일한 상품에 대해 동시에 주문이 여러번 들어올 때")
-    void concurrencyTest_orderSameroductThenStockDecraseCorrectly() throws Exception {
+    void concurrencyTest_orderSameProductThenStockDecreaseCorrectly() throws Exception {
         int initStock = 30;
         int orderQty = 1;
         int initPoint = 100_000;
         int productPrice = 5_000;
-        int tryCount = 1;
+        int tryCount = 5;
 
         UserModel user1 = userRepository.save(new UserModel(
                 "testuser1",
