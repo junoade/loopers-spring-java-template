@@ -2,6 +2,7 @@ package com.loopers.domain.product;
 
 import com.loopers.domain.brand.BrandModel;
 import com.loopers.domain.brand.BrandStatus;
+import com.loopers.domain.product.exception.NotEnoughStockException;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -158,7 +159,7 @@ public class ProductModelTest {
 
 
             // when
-            CoreException result = assertThrows(CoreException.class, () -> {
+            NotEnoughStockException result = assertThrows(NotEnoughStockException.class, () -> {
                 product.decreaseStock(3);
             });
 
@@ -166,5 +167,23 @@ public class ProductModelTest {
             AssertionsForClassTypes.assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
         }
 
+        @Test
+        @DisplayName("상품 재고가 충분하지만 차감하려는 재고가 음수 이면 에러를 반환한다")
+        void throwsBadException_whenStockAmountToDecreaseIsNullOrNegative() {
+            stock = 2;
+            ProductModel product = ProductModel.builder()
+                    .name(name)
+                    .category(category)
+                    .price(price)
+                    .stock(stock)
+                    .status(status)
+                    .brand(brand).build();
+
+            CoreException result = assertThrows(CoreException.class, () -> {
+                product.decreaseStock(-1);
+            });
+
+            AssertionsForClassTypes.assertThat(result.getErrorType()).isEqualTo(ErrorType.BAD_REQUEST);
+        }
     }
 }
