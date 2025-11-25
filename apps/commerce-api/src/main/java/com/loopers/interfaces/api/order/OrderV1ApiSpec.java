@@ -20,7 +20,7 @@ public interface OrderV1ApiSpec {
 
     @Operation(
             summary = "주문 실행",
-            description = "OrderV1Dto.OrderRequest 포맷으로 주문를 처리합니다."
+            description = "OrderV1Dto.OrderRequest 포맷으로 주문을 처리합니다."
     )
     ApiResponse<OrderV1Dto.OrderResponse> placeOrder(
             @Schema(name="", description = "주문 실행, 재고 및 결제 가능여부 확인 후 주문 처리")
