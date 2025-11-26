@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 public interface ProductV1ApiSpec {
     @Operation(
             summary = "상품 목록 조회",
-            description = "OrderV1Dto.OrderRequest 포맷으로 선조회를 처리합니다."
+            description = "RequestParams 포맷으로 상품 목록 조회를 처리합니다."
     )
     ApiResponse<ProductV1Dto.ProductListResponse<ProductLikeSummary>>  getProducts(
             @Schema(name="", description = "상품 전체 목록 조회 파라미터")
@@ -20,4 +20,14 @@ public interface ProductV1ApiSpec {
             ProductSortType sortType,
             Pageable pageable
     );
+
+    @Operation(
+            summary = "상품 조회",
+            description = "PathVariable로 productId를 받아 상품 조회를 처리합니다.."
+    )
+    ApiResponse<ProductV1Dto.ProductDetailResponse<ProductLikeSummary>>  getProductDetail(
+            @Schema(name="", description = "상품 전체 목록 조회 파라미터")
+            Long productId
+    );
+
 }

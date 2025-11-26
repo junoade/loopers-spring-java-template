@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductV1Controller implements ProductV1ApiSpec{
     private final ProductQueryService productQueryService;
 
+    @Override
     @GetMapping
     public ApiResponse<ProductV1Dto.ProductListResponse<ProductLikeSummary>> getProducts(@RequestParam(required = false, name = "brandId")
                                                                                              Long brandId,
@@ -24,5 +25,13 @@ public class ProductV1Controller implements ProductV1ApiSpec{
                                             @PageableDefault(size = 20) Pageable pageable) {
         Page<ProductLikeSummary> page = productQueryService.getProductListWithLikeCount(brandId, sortType, pageable);
         return ApiResponse.success(ProductV1Dto.ProductListResponse.of(page, page.stream().toList()));
+    }
+
+    @Override
+    @GetMapping("/{productId}")
+    public ApiResponse<ProductV1Dto.ProductDetailResponse<ProductLikeSummary>> getProductDetail(@PathVariable("productId") Long productId) {
+        ProductLikeSummary productLikeSummary = productQueryService.getProductLikeSummary(productId);
+
+        return ApiResponse.success(ProductV1Dto.ProductDetailResponse.of(productLikeSummary));
     }
 }

@@ -139,4 +139,40 @@ public class ProductQueryServiceTest {
         assertThat(second.getLikeCount()).isEqualTo(0L);
 
     }
+
+    @Test
+    @DisplayName("특정 상품에 대한 세부 정보를 조회한다")
+    void findProductDetail_withProductId() {
+        // given
+        BrandModel brand = brandRepository.save(
+                new BrandModel("브랜드A", "설명", BrandStatus.REGISTERED)
+        );
+        ProductModel p1 = productRepository.save(
+                new ProductModel("상품1", "카테고리", 10_000, 100, ProductStatus.ON_SALE, brand)
+        );
+        ProductModel p2 = productRepository.save(
+                new ProductModel("상품2", "카테고리", 20_000, 100, ProductStatus.ON_SALE, brand)
+        );
+
+        UserModel u1 = userRepository.save(new UserModel("user1", "u1", "유저1", "u1@test.com", "1997-01-01", "M", 100_000));
+        UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000));
+        UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000));
+
+        productLikeService.like(u1.getId(), p1.getId());
+        productLikeService.like(u2.getId(), p2.getId());
+        productLikeService.like(u3.getId(), p1.getId());
+
+        // when
+        ProductLikeSummary summary = productQueryService.getProductLikeSummary(p1.getId());
+
+        // then
+        assertThat(summary).isNotNull();
+        assertThat(summary.getProductId()).isEqualTo(p1.getId());
+        assertThat(summary.getProductName()).isEqualTo(p1.getName());
+        assertThat(summary.getBrandId()).isEqualTo(p1.getBrand().getId());
+        assertThat(summary.getBrandName()).isEqualTo(brand.getName());
+        assertThat(summary.getPrice()).isEqualTo(p1.getPrice());
+        assertThat(summary.getStatus()).isEqualTo(p1.getStatus());
+        assertThat(summary.getLikeCount()).isEqualTo(2L);
+    }
 }

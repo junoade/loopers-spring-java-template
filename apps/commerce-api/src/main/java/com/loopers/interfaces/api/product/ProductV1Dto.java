@@ -26,4 +26,12 @@ public class ProductV1Dto {
         }
 
     }
+
+    public record ProductDetailResponse<T>(
+            T content
+    ){
+        static <T> ProductDetailResponse<T> of(T content) {
+            return new ProductDetailResponse<>(content);
+        }
+    }
 }
