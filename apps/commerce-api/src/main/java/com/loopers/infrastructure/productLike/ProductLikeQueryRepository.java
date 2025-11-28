@@ -1,11 +1,12 @@
 package com.loopers.infrastructure.productLike;
 
-import com.loopers.domain.like.ProductLikeSummaryVO;
+import com.loopers.application.product.ProductLikeSummary;
 import com.loopers.domain.like.QProductLikeModel;
 import com.loopers.domain.product.ProductSortType;
 import com.loopers.domain.product.QProductModel;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,23 +22,42 @@ import java.util.Optional;
 public class ProductLikeQueryRepository {
     private final JPAQueryFactory queryFactory;
 
-    public Page<ProductLikeSummaryVO> findProductLikes(ProductSortType sortType,
-                                                       Pageable pageable) {
+    public Page<ProductLikeSummary> findProductLikes(Long brandId,
+                                                     ProductSortType sortType,
+                                                     Pageable pageable) {
 
         QProductModel product = QProductModel.productModel;
         QProductLikeModel productLike = QProductLikeModel.productLikeModel;
 
-        JPAQuery<ProductLikeSummaryVO> query = queryFactory
+        BooleanBuilder condition = new BooleanBuilder();
+        if(brandId != null) {
+            condition.and(product.brand.id.eq(brandId));
+        }
+
+        Long total = queryFactory.select(product.id.countDistinct())
+                .from(product)
+                .leftJoin(productLike).on(productLike.product.eq(product))
+                .where(condition)
+                .fetchOne();
+
+        if (total == null || total == 0) {
+            return Page.empty(pageable);
+        }
+
+        List<ProductLikeSummary> content = queryFactory
                 .select(Projections.constructor(
-                        ProductLikeSummaryVO.class,
+                        ProductLikeSummary.class,
                         product.id,
                         product.name,
+                        product.brand.id,
+                        product.brand.name,
                         product.price,
                         product.status,
-                        productLike.id.count()   // likeCount 집계
+                        productLike.id.count()  // likeCount
                 ))
                 .from(product)
                 .leftJoin(productLike).on(productLike.product.eq(product))
+                .where(condition)
                 .groupBy(
                         product.id,
                         product.name,
@@ -45,25 +65,21 @@ public class ProductLikeQueryRepository {
                         product.brand.name,
                         product.price,
                         product.status
-                );
-
-        applySort(sortType, query, product, productLike);
-
-        List<ProductLikeSummaryVO> content = query
+                )
+                .orderBy(applySort(sortType, productLike))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
-        return new PageImpl<>(content, pageable, content.size());
+        return new PageImpl<>(content, pageable, total);
     }
 
-    public Optional<ProductLikeSummaryVO> findProductDetail(Long productId) {
+    public Optional<ProductLikeSummary> findProductDetail(Long productId) {
         QProductModel product = QProductModel.productModel;
         QProductLikeModel productLike = QProductLikeModel.productLikeModel;
 
-        ProductLikeSummaryVO result = queryFactory
+        ProductLikeSummary result = queryFactory
                 .select(Projections.constructor(
-                        ProductLikeSummaryVO.class,
+                        ProductLikeSummary.class,
                         product.id,
                         product.name,
                         product.brand.id,
@@ -90,17 +106,18 @@ public class ProductLikeQueryRepository {
         return Optional.ofNullable(result);
     }
 
-    private void applySort(ProductSortType sortType, JPAQuery<?> query, QProductModel product, QProductLikeModel productLike) {
+    private OrderSpecifier<?> applySort(ProductSortType sortType, QProductLikeModel productLike) {
         if (sortType == null || sortType == ProductSortType.DEFAULT) {
-            query.orderBy(productLike.id.count().desc(), productLike.id.asc());
-            return;
+            return productLike.id.count().desc();
         }
 
-        switch(sortType) {
-            case LIKE_ASC -> query.orderBy(productLike.id.count().asc(), productLike.id.asc());
-            case LIKE_DESC -> query.orderBy(productLike.id.count().desc(), productLike.id.asc());
-            default -> query.orderBy(productLike.id.count().desc(), productLike.id.asc());
-        }
+        return switch(sortType) {
+            case LIKE_ASC -> productLike.id.count().asc();
+            case LIKE_DESC -> productLike.id.count().desc();
+            case PRICE_ASC -> productLike.product.price.asc();
+            case PRICE_DESC -> productLike.product.price.desc();
+            default -> productLike.id.count().desc();
+        };
     }
 
 }

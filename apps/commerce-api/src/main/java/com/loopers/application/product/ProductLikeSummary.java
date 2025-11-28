@@ -1,4 +1,4 @@
-package com.loopers.domain.like;
+package com.loopers.application.product;
 
 import com.loopers.domain.product.ProductStatus;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ProductLikeSummaryVO {
+public class ProductLikeSummary {
     private Long productId;
     private String productName;
     private Long brandId;
