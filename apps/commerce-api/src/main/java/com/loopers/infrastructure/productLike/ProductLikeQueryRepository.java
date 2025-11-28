@@ -114,6 +114,8 @@ public class ProductLikeQueryRepository {
         return switch(sortType) {
             case LIKE_ASC -> productLike.id.count().asc();
             case LIKE_DESC -> productLike.id.count().desc();
+            case PRICE_ASC -> productLike.product.price.asc();
+            case PRICE_DESC -> productLike.product.price.desc();
             default -> productLike.id.count().desc();
         };
     }
