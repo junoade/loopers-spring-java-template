@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -35,7 +36,7 @@ public class ProductModel extends BaseEntity {
     private BrandModel brand;
 
     @Column(name = "like_count")
-    private Integer likeCount;
+    private int likeCount;
 
     protected ProductModel() {}
 
@@ -59,6 +60,7 @@ public class ProductModel extends BaseEntity {
         this.stock = stock;
         this.status = status;
         this.brand = brand;
+        this.likeCount = 0;
     }
 
     public void decreaseStock(Integer stock) {
