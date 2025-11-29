@@ -2,7 +2,6 @@ package com.loopers.application.product;
 
 import com.loopers.application.like.ProductLikeQueryRepository;
 import com.loopers.domain.product.ProductSortType;
-import com.loopers.infrastructure.productLike.ProductLikeQueryImpl;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;

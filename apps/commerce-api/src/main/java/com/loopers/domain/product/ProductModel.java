@@ -36,7 +36,7 @@ public class ProductModel extends BaseEntity {
     private BrandModel brand;
 
     @Column(name = "like_count")
-    private int likeCount;
+    private long likeCount;
 
     protected ProductModel() {}
 

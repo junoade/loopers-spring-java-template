@@ -32,12 +32,12 @@ public class LargeProductsDataInitializer implements CommandLineRunner {
 
 
         log.info("[LargeProductsDataInitializer] start");
-        try (Connection conn = dataSource.getConnection()) {
-            ScriptUtils.executeSqlScript(
-                    conn,
-                    new ClassPathResource("db/fixtures/large-product-data.sql")
-            );
-        }
+//        try (Connection conn = dataSource.getConnection()) {
+//            ScriptUtils.executeSqlScript(
+//                    conn,
+//                    new ClassPathResource("db/fixtures/large-product-data.sql")
+//            );
+//        }
         log.info("[LargeProductsDataInitializer] done");
     }
 }
