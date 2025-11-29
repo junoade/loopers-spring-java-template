@@ -1,5 +1,6 @@
 package com.loopers.infrastructure.productLike;
 
+import com.loopers.application.like.ProductLikeQueryRepository;
 import com.loopers.application.product.ProductLikeSummary;
 import com.loopers.domain.like.QProductLikeModel;
 import com.loopers.domain.product.ProductSortType;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class ProductLikeQueryRepository {
+public class ProductLikeQueryImpl implements ProductLikeQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     public Page<ProductLikeSummary> findProductLikes(Long brandId,

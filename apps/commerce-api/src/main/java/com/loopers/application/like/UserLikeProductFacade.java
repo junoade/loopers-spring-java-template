@@ -23,6 +23,7 @@ public class UserLikeProductFacade {
         ProductModel product = productService.getProductDetail(input.productId());
         productService.validateProductDeleteOrStopSelling(product);
         productLikeService.like(found.getId(), input.productId());
+        product.increaseLikeCount();
     }
 
     @Transactional
@@ -31,5 +32,6 @@ public class UserLikeProductFacade {
         ProductModel product = productService.getProductDetail(input.productId());
         productService.validateProductDeleteOrStopSelling(product);
         productLikeService.dislike(found.getId(), product.getId());
+        product.decreaseLikeCount();
     }
 }
