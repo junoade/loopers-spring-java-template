@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,4 +21,12 @@ public interface ProductJpaRepository extends JpaRepository<ProductModel, Long> 
     Optional<ProductModel> findByIdForUpdate(@Param("id") Long id);
     Optional<ProductModel> findById(Long id);
     Optional<ProductModel> findByName(String name);
+
+    @Modifying
+    @Query("update ProductModel p set p.likeCount = p.likeCount + 1 where p.id = :productId")
+    int increaseLikeCount(@Param("productId") Long productId);
+
+    @Modifying
+    @Query("update ProductModel p set p.likeCount = p.likeCount - 1 where p.id = :productId")
+    int decreaseLikeCount(@Param("productId") Long productId);
 }

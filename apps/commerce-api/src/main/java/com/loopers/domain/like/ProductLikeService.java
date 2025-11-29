@@ -15,8 +15,8 @@ public class ProductLikeService {
     }
 
     @Transactional
-    public void dislike(Long userPkId, Long productId) {
-        productLikeRepository.delete(userPkId, productId);
+    public int dislike(Long userPkId, Long productId) {
+        return productLikeRepository.deleteByUserAndProduct(userPkId, productId);
     }
 
 }

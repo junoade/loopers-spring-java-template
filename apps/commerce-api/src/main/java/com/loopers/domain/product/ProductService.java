@@ -85,6 +85,16 @@ public class ProductService {
         return product.getPrice() * quantity;
     }
 
+    @Transactional
+    public int increaseProductLikeCount(Long productId) {
+        return productRepository.increaseLikeCount(productId);
+    }
+
+    @Transactional
+    public int decreaseProductLikeCount(Long productId) {
+        return productRepository.decreaseLikeCount(productId);
+    }
+
 
     public void validateProductDeleteOrStopSelling(ProductModel product) {
         if(product.isStatusOnDeletedOrStopSelling())
