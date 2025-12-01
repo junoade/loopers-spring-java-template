@@ -13,4 +13,6 @@ public interface ProductRepository {
     Optional<ProductModel> findByName(String name);
     boolean existsById(Long id);
     ProductModel save(ProductModel product);
+    int increaseLikeCount(Long productId);
+    int decreaseLikeCount(Long productId);
 }

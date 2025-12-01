@@ -22,4 +22,8 @@ public interface ProductLikeJpaRepository extends JpaRepository<ProductLikeModel
     @Query(value = "INSERT IGNORE INTO product_like(user_id, product_id) VALUES (:userId, :productId)",
             nativeQuery = true)
     int insertIgnore(@Param("userId") Long userPkId, @Param("productId") Long productId);
+
+    @Modifying
+    @Query("delete from ProductLikeModel pl where pl.user.id = :userPkId and pl.product.id = :productId")
+    int deleteByUserAndProduct(@Param("userPkId") Long userPkId, @Param("productId") Long productId);
 }

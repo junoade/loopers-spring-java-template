@@ -34,6 +34,9 @@ public class ProductModel extends BaseEntity {
     @JoinColumn(name = "brand_id", nullable = false)
     private BrandModel brand;
 
+    @Column(name = "like_count")
+    private long likeCount;
+
     protected ProductModel() {}
 
     @Builder
@@ -56,6 +59,7 @@ public class ProductModel extends BaseEntity {
         this.stock = stock;
         this.status = status;
         this.brand = brand;
+        this.likeCount = 0;
     }
 
     public void decreaseStock(Integer stock) {
@@ -75,6 +79,15 @@ public class ProductModel extends BaseEntity {
 
     public boolean isStatusOnDeletedOrStopSelling() {
         return status == ProductStatus.DELETE || status == ProductStatus.STOP_SELLING;
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+    public void decreaseLikeCount() {
+        if(this.likeCount > 0) {
+            this.likeCount--;
+        }
     }
 
     private void validateProductCategory(String category) {

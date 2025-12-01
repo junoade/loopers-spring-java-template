@@ -49,4 +49,15 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Optional<ProductModel> findByIdForUpdate(Long id) {
         return productJpaRepository.findByIdForUpdate(id);
     }
+
+
+    @Override
+    public int increaseLikeCount(Long productId) {
+        return productJpaRepository.increaseLikeCount(productId);
+    }
+
+    @Override
+    public int decreaseLikeCount(Long productId) {
+        return productJpaRepository.decreaseLikeCount(productId);
+    }
 }

@@ -42,4 +42,9 @@ public class ProductLikeRepositoryImpl implements ProductLikeRepository {
     public int countByProductId(Long productId) {
         return productLikeJpaRepository.countByProductId(productId);
     }
+
+    @Override
+    public int deleteByUserAndProduct(Long userId, Long productId) {
+        return productLikeJpaRepository.deleteByUserAndProduct(userId, productId);
+    }
 }
