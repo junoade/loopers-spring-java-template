@@ -5,6 +5,7 @@ import com.loopers.domain.product.ProductSortType;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,16 @@ public class ProductQueryService {
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "존재하지 않는 상품입니다"));
     }
 
+    @Cacheable(
+            cacheNames = "productLikeSummary",
+            key = "T(String).valueOf(#brandId ?: 'ALL')" +
+                    " + ':' + (#p1 != null ? #p1.name() : 'DEFAULT')" +
+                    " + ':' + (#p2 != null ? #p2.pageNumber : 0)" +
+                    " + ':' + (#p3 != null ? #p3.pageSize : 20)"
+    )
     @Transactional(readOnly = true)
     public Page<ProductLikeSummary> getProductListWithLikeCount(Long brandId, ProductSortType sortType, Pageable pageable) {
         return ProductLikeQuery.findProductLikes(brandId, sortType, pageable);
     }
+
 }

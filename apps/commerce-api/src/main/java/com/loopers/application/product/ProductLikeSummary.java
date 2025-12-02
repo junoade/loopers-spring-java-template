@@ -4,9 +4,13 @@ import com.loopers.domain.product.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @AllArgsConstructor
-public class ProductLikeSummary {
+public class ProductLikeSummary implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Long productId;
     private String productName;
     private Long brandId;
