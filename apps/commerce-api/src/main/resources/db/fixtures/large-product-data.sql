@@ -68,7 +68,7 @@ WHERE n <= 10000;
 
 
 -- 4) Product 1,000,000 개 생성
-INSERT INTO product (name, category, price, status, brand_id, created_at, updated_at)
+INSERT INTO product (name, category, stock, price, status, brand_id, created_at, updated_at)
 SELECT
     CONCAT('Product_', n) AS name,
     CASE
@@ -78,6 +78,7 @@ SELECT
         WHEN RAND() < 0.8 THEN '가전'
         ELSE '기타'
         END AS category,
+    FLOOR(RAND() * 100000)             AS stock,
     FLOOR(RAND() * 100000)             AS price,
     CASE WHEN n % 20 = 0 THEN 'STOP_SELLING' ELSE 'ON_SALE' END AS status,
     ((n - 1) % 10000) + 1              AS brand_id,
