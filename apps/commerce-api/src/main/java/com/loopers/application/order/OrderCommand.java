@@ -1,5 +1,7 @@
 package com.loopers.application.order;
 
+import com.loopers.application.payment.PaymentFlowType;
+import com.loopers.application.payment.PaymentInfo;
 import com.loopers.domain.order.OrderItemModel;
 
 import java.util.List;
@@ -13,7 +15,9 @@ public class OrderCommand {
      */
     public record Order (
         String userId,
-        List<OrderLine> orderLineRequests
+        List<OrderLine> orderLineRequests,
+        PaymentFlowType paymentFlowType,
+        PaymentInfo paymentInfo
     ) { }
 
     /**
