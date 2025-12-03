@@ -22,7 +22,10 @@ public class UserLikeProductFacade {
         UserModel found = userService.getUser(input.userId());
         ProductModel product = productService.getProductDetail(input.productId());
         productService.validateProductDeleteOrStopSelling(product);
-        productLikeService.like(found.getId(), input.productId());
+        int resultRow = productLikeService.like(found.getId(), input.productId());
+        if(resultRow == 1) {
+            productService.increaseProductLikeCount(product.getId());
+        }
     }
 
     @Transactional
@@ -30,6 +33,9 @@ public class UserLikeProductFacade {
         UserModel found = userService.getUser(input.userId());
         ProductModel product = productService.getProductDetail(input.productId());
         productService.validateProductDeleteOrStopSelling(product);
-        productLikeService.dislike(found.getId(), product.getId());
+        int resultRow = productLikeService.dislike(found.getId(), product.getId());
+        if(resultRow == 1) {
+            productService.decreaseProductLikeCount(product.getId());
+        }
     }
 }

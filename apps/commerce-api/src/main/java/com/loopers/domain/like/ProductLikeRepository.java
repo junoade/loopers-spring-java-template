@@ -9,4 +9,5 @@ public interface ProductLikeRepository {
     void delete(Long userPkId, Long productId);
     int insertIgnore(Long userPkId, Long productId);
     int countByProductId(Long productId);
+    int deleteByUserAndProduct(Long userId, Long productId);
 }
