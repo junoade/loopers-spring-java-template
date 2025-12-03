@@ -1,5 +1,7 @@
 package com.loopers.application.order;
 
+import com.loopers.domain.order.OrderStatus;
+
 import java.util.List;
 
 public class OrderResult {
@@ -22,6 +24,7 @@ public class OrderResult {
             Long orderId,
             int normalPrice,
             int errorPrice,
+            OrderStatus orderStatus,
             List<OrderCommand.OrderLine> successLines,
             List<OrderCommand.OrderLine> failedLines
     ) {
@@ -29,6 +32,7 @@ public class OrderResult {
                                           Long orderId,
                                           int normalPrice,
                                           int errorPrice,
+                                        OrderStatus orderStatus,
                                         List<OrderCommand.OrderLine> successLines,
                                         List<OrderCommand.OrderLine> failedLines) {
             return new PlaceOrderResult(
@@ -36,6 +40,7 @@ public class OrderResult {
                     orderId,
                     normalPrice,
                     errorPrice,
+                    orderStatus,
                     successLines,
                     failedLines);
         }

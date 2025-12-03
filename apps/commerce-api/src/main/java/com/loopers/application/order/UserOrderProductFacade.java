@@ -5,7 +5,6 @@ import com.loopers.application.payment.strategy.PaymentStrategy;
 import com.loopers.domain.order.OrderItemModel;
 import com.loopers.domain.order.OrderItemStatus;
 import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.order.OrderService;
 import com.loopers.domain.product.ProductModel;
 import com.loopers.domain.product.ProductService;
 import com.loopers.domain.user.UserModel;
@@ -24,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserOrderProductFacade {
-    private final OrderService orderService;
     private final ProductService productService;
     private final UserService userService;
 
@@ -73,6 +71,7 @@ public class UserOrderProductFacade {
                 orderModel.getId(),
                 stockResult.requiringPrice(),
                 stockResult.errorPrice(),
+                orderModel.getStatus(),
                 stockResult.successLines(),
                 stockResult.failedLines()
         );

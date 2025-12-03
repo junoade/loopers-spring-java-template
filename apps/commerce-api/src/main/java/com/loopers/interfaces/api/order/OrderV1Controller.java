@@ -29,6 +29,8 @@ public class OrderV1Controller implements OrderV1ApiSpec {
     public ApiResponse<OrderV1Dto.OrderResponse> placeOrder(@RequestBody OrderV1Dto.OrderRequest request) {
         OrderCommand.Order orderCmd = request.toCommand();
         OrderResult.PlaceOrderResult placeOrderResult = userOrderProductFacade.placeOrder(orderCmd);
+
+
         return ApiResponse.success(OrderV1Dto.OrderResponse.fromOrderPlacement(
                 placeOrderResult
         ));

@@ -99,7 +99,7 @@ public class OrderV1Dto {
                     placeOrderResult.normalPrice(),  // 실제 사용 포인트
                     placeOrderResult.errorPrice(),
                     placeOrderResult.orderId(),                          // 여기서는 포인트 부족이면 예외로 롤백 처리했다고 가정
-                    "ORDERED",
+                    placeOrderResult.orderStatus().toString(),
                     successLines.size(),
                     failedLines.size(),
                     successLines,
