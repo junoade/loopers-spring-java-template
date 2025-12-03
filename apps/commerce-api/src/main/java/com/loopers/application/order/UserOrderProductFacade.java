@@ -1,5 +1,7 @@
 package com.loopers.application.order;
 
+import com.loopers.application.payment.PaymentStrategyResolver;
+import com.loopers.application.payment.strategy.PaymentStrategy;
 import com.loopers.domain.order.OrderItemModel;
 import com.loopers.domain.order.OrderItemStatus;
 import com.loopers.domain.order.OrderModel;
@@ -26,6 +28,8 @@ public class UserOrderProductFacade {
     private final ProductService productService;
     private final UserService userService;
 
+    private final PaymentStrategyResolver paymentStrategyResolver;
+
     @Transactional(readOnly = true)
     public OrderResult.PreOrderResult preOrder(OrderCommand.Order orderCommand) {
         UserModel userModel = userService.getUser(orderCommand.userId());
@@ -45,36 +49,24 @@ public class UserOrderProductFacade {
     /**
      * [요구사항] 주문 전체 흐름에 대한 원자성이 보장
      * - 재고가 존재하지 않거나 부족할 경우 주문은 실패
-     * - 주문 시 유저의 포인트 잔액이 부족할 경우 주문은 실패
+     * - 주문 시 유저의 결제방식은 결제 전략 패턴을 통해 처리합니다
      * - 쿠폰, 재고, 포인트 처리 등 하나라도 작업이 실패하면 모두 롤백처리
-     * - 주문 성공 시, 모든 처리는 정상 반영
      * @param orderCommand
      */
     @Transactional
     public OrderResult.PlaceOrderResult placeOrder(OrderCommand.Order orderCommand) {
 
         List<OrderItemModel> orderItems = toDomainOrderItem(orderCommand.orderLineRequests());
-        // OrderModel orderModel = orderService.createPendingOrder(userModel, orderItems);
-
         UserModel userModel = userService.getUser(orderCommand.userId());
         StockResult stockResult = decreaseAllStocks(orderItems);
 
-        Integer requiringPoints = stockResult.requiringPrice();
-        // 포인트 부족 시 롤백
-        if(!userModel.hasEnoughPoint(requiringPoints)) {
-            throw new CoreException(ErrorType.BAD_REQUEST, "포인트가 부족합니다. 다시 확인해주세요");
-        }
-
-        userService.decreaseUserPoint(userModel.getId(), requiringPoints);
-
         boolean hasOutOfStockCase = !stockResult.failedLines().isEmpty();
         if(hasOutOfStockCase) {
-            // orderService.updateOrderAsPartialSuccess(orderModel, stockResult.requiringPrice() , stockResult.errorPrice());
             throw new CoreException(ErrorType.BAD_REQUEST, "재고가 부족합니다. 다시 확인해주세요");
         }
 
-        // orderService.updateOrderAsSuccess(orderModel, stockResult.requiringPrice());
-        OrderModel orderModel = orderService.createSuccessOrder(userModel, orderItems, stockResult.requiringPrice());
+        PaymentStrategy paymentStrategy = paymentStrategyResolver.resolve(orderCommand.paymentFlowType());
+        OrderModel orderModel = paymentStrategy.createOrder(userModel, orderItems, stockResult);
 
         return OrderResult.PlaceOrderResult.of(
                 userModel.getUserId(),
