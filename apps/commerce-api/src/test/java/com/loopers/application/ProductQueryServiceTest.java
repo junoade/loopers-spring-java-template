@@ -1,11 +1,12 @@
 package com.loopers.application;
 
+import com.loopers.application.like.LikeCommand;
+import com.loopers.application.like.UserLikeProductFacade;
+import com.loopers.application.product.ProductLikeSummary;
 import com.loopers.application.product.ProductQueryService;
 import com.loopers.domain.brand.BrandModel;
 import com.loopers.domain.brand.BrandRepository;
 import com.loopers.domain.brand.BrandStatus;
-import com.loopers.domain.like.ProductLikeService;
-import com.loopers.application.product.ProductLikeSummary;
 import com.loopers.domain.product.ProductModel;
 import com.loopers.domain.product.ProductRepository;
 import com.loopers.domain.product.ProductSortType;
@@ -36,7 +37,7 @@ public class ProductQueryServiceTest {
     private BrandRepository brandRepository;
 
     @Autowired
-    private ProductLikeService productLikeService;
+    private UserLikeProductFacade productLikeService;
 
     @Autowired
     private DatabaseCleanUp databaseCleanUp;
@@ -64,9 +65,9 @@ public class ProductQueryServiceTest {
         UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000));
         UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000));
 
-        productLikeService.like(u1.getId(), p1.getId());
-        productLikeService.like(u2.getId(), p1.getId());
-        productLikeService.like(u3.getId(), p2.getId());
+        productLikeService.userLikeProduct(new LikeCommand.Like(u1.getUserId(), p1.getId()));
+        productLikeService.userLikeProduct(new LikeCommand.Like(u2.getUserId(), p1.getId()));
+        productLikeService.userLikeProduct(new LikeCommand.Like(u3.getUserId(), p2.getId()));
 
         // when
         PageRequest pageable = PageRequest.of(0, 10);
@@ -114,7 +115,7 @@ public class ProductQueryServiceTest {
         UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000));
         UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000));
 
-        productLikeService.like(u1.getId(), p1.getId());
+        productLikeService.userLikeProduct(new LikeCommand.Like(u1.getUserId(), p1.getId()));
 
         // when
         PageRequest pageable = PageRequest.of(0, 10);
@@ -158,9 +159,9 @@ public class ProductQueryServiceTest {
         UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000));
         UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000));
 
-        productLikeService.like(u1.getId(), p1.getId());
-        productLikeService.like(u2.getId(), p2.getId());
-        productLikeService.like(u3.getId(), p1.getId());
+        productLikeService.userLikeProduct(new LikeCommand.Like(u1.getUserId(), p1.getId()));
+        productLikeService.userLikeProduct(new LikeCommand.Like(u2.getUserId(), p2.getId()));
+        productLikeService.userLikeProduct(new LikeCommand.Like(u3.getUserId(), p1.getId()));
 
         // when
         ProductLikeSummary summary = productQueryService.getProductLikeSummary(p1.getId());
