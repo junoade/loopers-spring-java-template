@@ -1,9 +1,7 @@
 package com.loopers.interfaces.api.pgVendor;
 
 import com.loopers.application.order.OrderResult;
-import com.loopers.domain.order.OrderService;
 import com.loopers.interfaces.api.order.OrderV1Dto;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

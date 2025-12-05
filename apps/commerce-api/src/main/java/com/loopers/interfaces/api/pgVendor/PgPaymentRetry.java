@@ -1,6 +1,5 @@
 package com.loopers.interfaces.api.pgVendor;
 
-import com.loopers.domain.order.OrderService;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PgPaymentRetry {
     private final PgClient pgClient;
-    private final OrderService orderService;
 
     /**
      * PG 요청에 대해 Resilience4j Retry 로직
