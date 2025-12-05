@@ -41,8 +41,8 @@ public class OrderV1Dto {
 
     public record OrderResponse(
             String userId, // 이용자ID
-            Integer normalPrice,
-            Integer errorPrice,
+            Long normalPrice,
+            Long errorPrice,
             Long orderId, // 실 주문의 경우에만 값 존재
             String status, // 주문 상태
             int successCount,

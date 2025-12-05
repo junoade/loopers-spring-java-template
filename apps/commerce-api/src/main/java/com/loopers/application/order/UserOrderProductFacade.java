@@ -162,8 +162,8 @@ public class UserOrderProductFacade {
         return OrderResult.PlaceOrderResult.of(
                 orderModel.getUser().getUserId(),
                 orderModel.getId(),
-                orderModel.getNormalPrice() == null ? 0 : orderModel.getNormalPrice(),
-                orderModel.getErrorPrice() == null ? 0 : orderModel.getErrorPrice(),
+                orderModel.getNormalPrice(),
+                orderModel.getErrorPrice(),
                 orderModel.getStatus(),
                 successLines,
                 failedLines

@@ -21,7 +21,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderAsFailed(Long orderId, int errorPrice) {
+    public void updateOrderAsFailed(Long orderId, long errorPrice) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
         orderModel.updateToFailed(errorPrice);
@@ -42,10 +42,10 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderAsSuccess(Long orderId, int normalPrice) {
+    public void updateOrderAsSuccess(Long orderId, long normalPrice) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
-        orderModel.updateToFailed(normalPrice);
+        orderModel.updateToSuccess(normalPrice);
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderModel createSuccessOrder(UserModel userModel, List<OrderItemModel> orderItems, int normalPrice) {
+    public OrderModel createSuccessOrder(UserModel userModel, List<OrderItemModel> orderItems, long normalPrice) {
         OrderModel orderModel = OrderModel.createSuccess(userModel, orderItems, normalPrice);
         return orderRepository.save(orderModel);
     }

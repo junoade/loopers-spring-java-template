@@ -18,9 +18,9 @@ public class OrderModel extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private Integer totalPrice;
-    private Integer normalPrice;
-    private Integer errorPrice;
+    private long totalPrice;
+    private long normalPrice;
+    private long errorPrice;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -48,7 +48,7 @@ public class OrderModel extends BaseEntity {
         return orderModel;
     }
 
-    static OrderModel createSuccess(UserModel userModel, List<OrderItemModel> orderItems, int normalPrice) {
+    static OrderModel createSuccess(UserModel userModel, List<OrderItemModel> orderItems, long normalPrice) {
         OrderModel orderModel = new OrderModel();
         orderModel.user = userModel;
         orderModel.updateToSuccess(normalPrice);
@@ -70,17 +70,17 @@ public class OrderModel extends BaseEntity {
         status = OrderStatus.PENDING;
     }
 
-    void updateToSuccess(int normalPrice) {
+    void updateToSuccess(long normalPrice) {
         status = OrderStatus.SUCCESS;
         this.normalPrice = normalPrice;
     }
 
-    void updateToFailed(int errorPrice) {
+    void updateToFailed(long errorPrice) {
         status = OrderStatus.FAILED;
         this.errorPrice = errorPrice;
     }
 
-    void updateToPartialSuccess(int normalPrice, int errorPrice) {
+    void updateToPartialSuccess(long normalPrice, long errorPrice) {
         status = OrderStatus.PARTIAL_SUCCESS;
         this.normalPrice = normalPrice;
         this.errorPrice = errorPrice;

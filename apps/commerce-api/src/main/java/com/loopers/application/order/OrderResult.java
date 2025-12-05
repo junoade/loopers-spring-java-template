@@ -7,12 +7,12 @@ import java.util.List;
 public class OrderResult {
     public record PreOrderResult(
             String userId,
-            int requiringPoints,
+            long requiringPoints,
             List<OrderCommand.OrderLine> successLines,
             List<OrderCommand.OrderLine> failedLines
     ) {
         public static PreOrderResult of(String userId,
-                                        int successPoint,
+                                        long successPoint,
                                         List<OrderCommand.OrderLine> successLines,
                                         List<OrderCommand.OrderLine> failedLines) {
             return new PreOrderResult(userId, successPoint, successLines, failedLines);
@@ -22,16 +22,16 @@ public class OrderResult {
     public record PlaceOrderResult(
             String userId,
             Long orderId,
-            int normalPrice,
-            int errorPrice,
+            long normalPrice,
+            long errorPrice,
             OrderStatus orderStatus,
             List<OrderCommand.OrderLine> successLines,
             List<OrderCommand.OrderLine> failedLines
     ) {
         public static PlaceOrderResult of(String userId,
                                           Long orderId,
-                                          int normalPrice,
-                                          int errorPrice,
+                                          long normalPrice,
+                                          long errorPrice,
                                         OrderStatus orderStatus,
                                         List<OrderCommand.OrderLine> successLines,
                                         List<OrderCommand.OrderLine> failedLines) {
