@@ -18,6 +18,7 @@ dependencies {
     // resilience4j
     implementation("io.github.resilience4j:resilience4j-spring-boot3")
     implementation("io.github.resilience4j:resilience4j-timelimiter")
+    implementation ("io.github.resilience4j:resilience4j-micrometer")
 
     // querydsl
     annotationProcessor("com.querydsl:querydsl-apt::jakarta")
