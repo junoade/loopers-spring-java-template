@@ -87,6 +87,10 @@ public class OrderModel extends BaseEntity {
         this.errorPrice = errorPrice;
     }
 
+    void updateStatus(OrderStatus status) {
+        this.status = status;
+    }
+
     static Integer getTotalPrice(List<OrderItemModel> orderItems) {
         Integer totalPrice = 0;
         for (OrderItemModel orderItem : orderItems) {

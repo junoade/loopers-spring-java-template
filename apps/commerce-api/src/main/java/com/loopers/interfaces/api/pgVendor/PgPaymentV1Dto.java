@@ -1,11 +1,6 @@
 package com.loopers.interfaces.api.pgVendor;
 
-import com.loopers.application.order.OrderCommand;
-import com.loopers.application.payment.PaymentFlowType;
 import com.loopers.application.payment.PaymentInfo;
-import com.loopers.interfaces.api.order.OrderV1Dto;
-
-import java.util.List;
 
 public class PgPaymentV1Dto {
 
@@ -31,9 +26,15 @@ public class PgPaymentV1Dto {
         }
     }
 
-    public record Response (
+    public record Response(
             String transactionKey,
+            String orderId,
+            String cardType,
+            String cardNo,
+            long amount,
             String status,
             String reason
-    ) { }
+    ) {}
+
+
 }
