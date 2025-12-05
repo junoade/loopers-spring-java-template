@@ -10,18 +10,17 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@Getter
 public class OrderModel extends BaseEntity {
 
     private Integer orderCnt;
 
-    @Getter
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     private Integer totalPrice;
     private Integer normalPrice;
     private Integer errorPrice;
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)

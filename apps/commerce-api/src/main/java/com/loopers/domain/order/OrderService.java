@@ -27,6 +27,13 @@ public class OrderService {
         orderModel.updateToFailed(errorPrice);
     }
 
+    @Transactional
+    public void updateOrderAsFailed(Long orderId) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
+        orderModel.updateToFailed(orderModel.getTotalPrice());
+    }
+
     @Transactional(readOnly = true)
     public boolean isPending(Long orderId) {
         OrderModel orderModel = orderRepository.findById(orderId)
@@ -52,5 +59,11 @@ public class OrderService {
     public OrderModel createSuccessOrder(UserModel userModel, List<OrderItemModel> orderItems, int normalPrice) {
         OrderModel orderModel = OrderModel.createSuccess(userModel, orderItems, normalPrice);
         return orderRepository.save(orderModel);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderModel getOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
     }
 }

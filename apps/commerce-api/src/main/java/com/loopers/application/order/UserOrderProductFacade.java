@@ -5,6 +5,7 @@ import com.loopers.application.payment.strategy.PaymentStrategy;
 import com.loopers.domain.order.OrderItemModel;
 import com.loopers.domain.order.OrderItemStatus;
 import com.loopers.domain.order.OrderModel;
+import com.loopers.domain.order.OrderService;
 import com.loopers.domain.product.ProductModel;
 import com.loopers.domain.product.ProductService;
 import com.loopers.domain.user.UserModel;
@@ -25,6 +26,7 @@ import java.util.List;
 public class UserOrderProductFacade {
     private final ProductService productService;
     private final UserService userService;
+    private final OrderService orderService;
 
     private final PaymentStrategyResolver paymentStrategyResolver;
 
@@ -139,5 +141,32 @@ public class UserOrderProductFacade {
                 })
                 .toList();
 
+    }
+
+
+    @Transactional(readOnly = true)
+    public OrderResult.PlaceOrderResult getOrderResult(Long orderId) {
+        OrderModel orderModel = orderService.getOrder(orderId);
+
+        List<OrderCommand.OrderLine> successLines = new ArrayList<>();
+        List<OrderCommand.OrderLine> failedLines = new ArrayList<>();
+
+        for(OrderItemModel item : orderModel.getOrderItems()) {
+            if(item.getStatus() == OrderItemStatus.SUCCESS) {
+                successLines.add(OrderCommand.OrderLine.from(item));
+            } else {
+                failedLines.add(OrderCommand.OrderLine.from(item));
+            }
+        }
+
+        return OrderResult.PlaceOrderResult.of(
+                orderModel.getUser().getUserId(),
+                orderModel.getId(),
+                orderModel.getNormalPrice() == null ? 0 : orderModel.getNormalPrice(),
+                orderModel.getErrorPrice() == null ? 0 : orderModel.getErrorPrice(),
+                orderModel.getStatus(),
+                successLines,
+                failedLines
+        );
     }
 }
