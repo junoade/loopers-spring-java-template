@@ -2,6 +2,8 @@ package com.loopers.interfaces.api.pgVendor;
 
 import com.loopers.domain.order.OrderService;
 import feign.FeignException;
+import feign.RetryableException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,7 @@ public class PgPaymentRetry {
 
 
     @Retry(name = "pgPayment", fallbackMethod = "pgPaymentOrderStatusFallback")
-    @CircuitBreaker(name = "pgCircuit", fallbackMethod = "pgPaymentFallback")
+    @CircuitBreaker(name = "pgCircuit", fallbackMethod = "pgPaymentOrderStatusCircuitBreakerFallback")
     public void requestPaymentForPendingOrder(String userId, String orderId) {
         log.debug("[PG PAYMENT] called for orderId={}", orderId);
         pgClient.requestPaymentWithOrderId(userId, orderId);
@@ -58,6 +60,45 @@ public class PgPaymentRetry {
                 orderService.updateOrderAsFailed(parseOrderId);
             }
         }
+
+    }
+
+    public void pgPaymentOrderStatusCircuitBreakerFallback(String userId, String orderId, Throwable ex) {
+        if (ex instanceof CallNotPermittedException) {
+            log.warn("[PG][CIRCUIT_OPEN] call blocked. userId={}, orderId={}, cause={}",
+                    userId, orderId, ex.toString());
+            return;
+        }
+
+        if (ex instanceof FeignException fe) {
+            int status = fe.status();
+            if (status == 404) {
+                log.error("[PG][HTTP_404] transaction not found. userId={}, orderId={}, msg={}",
+                        userId, orderId, fe.toString());
+                // 여기서 주문 FAIL 처리 같은 보상 로직
+                // orderService.updateOrderAsFailed(...);
+            } else if (status >= 500) {
+                log.error("[PG][HTTP_5XX] server error. userId={}, orderId={}, status={}, msg={}",
+                        userId, orderId, status, fe.toString());
+            } else {
+                log.warn("[PG][HTTP_4XX] client error. userId={}, orderId={}, status={}, msg={}",
+                        userId, orderId, status, fe.toString());
+            }
+            return;
+        }
+
+        // 타임아웃/네트워크 오류 (RetryableException 등)
+        if (ex instanceof RetryableException) {
+            log.error("[PG][RETRYABLE] network/timeout error. userId={}, orderId={}, msg={}",
+                    userId, orderId, ex.getMessage(), ex);
+            return;
+        }
+
+        // 4) 그 외 알 수 없는 에러
+        log.error("[PG][UNKNOWN] unexpected error. userId={}, orderId={}, type={}, msg={}",
+                userId, orderId, ex.getClass().getSimpleName(), ex.getMessage(), ex);
+
+
 
     }
 
