@@ -44,6 +44,21 @@ cloud:
           url: http://localhost:8082
           connect-timeout: 2000
           read-timeout: 6000
+feign:
+  Logger:
+    Level=FULL:
+
+resilience4j:
+  retry:
+    instances:
+      pgPayment:
+        max-attempts: 3               # 최초시도 + 재시도 2번
+        wait-duration: 1s             # 재시도 간격
+        retry-exceptions:             # 재시도할 예외 지정
+          - feign.RetryableException
+        ignore-exceptions:            # 재시도 하지 않고 실패 처리할 예외
+          - com.loopers.support.error.CoreException
+        fail-after-max-attempts: true
 
 ---
 spring:

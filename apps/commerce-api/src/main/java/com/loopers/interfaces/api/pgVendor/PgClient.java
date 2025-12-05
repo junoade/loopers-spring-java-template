@@ -1,5 +1,6 @@
 package com.loopers.interfaces.api.pgVendor;
 
+import com.loopers.interfaces.api.ApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 )
 public interface PgClient {
     @PostMapping("/api/v1/payments")
-    PgPaymentV1Dto.Response requestPayment(
+    void requestPayment(
             @RequestHeader("X-USER-ID") String userId,
             @RequestBody PgPaymentV1Dto.Request request);
 }

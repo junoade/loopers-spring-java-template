@@ -3,18 +3,20 @@ package com.loopers.interfaces.api.pgVendor;
 import com.loopers.application.order.OrderResult;
 import com.loopers.domain.order.OrderService;
 import com.loopers.interfaces.api.order.OrderV1Dto;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PgPaymentService {
-    private final PgClient pgClient;
-    private final OrderService orderService;
+    private final PgPaymentRetry pgPaymentRetry;
 
     /**
-     * 비동기 요청 송신
+     * 비동기 요청 송신 및 Resilience Retry를 AOP로 호출
      * @param orderResult
      * @param request
      * @ref AsyncConfig
@@ -28,12 +30,6 @@ public class PgPaymentService {
                 orderResult.normalPrice(),
                 "http://localhost:8080/api/v1/payments/callback"
         );
-
-        try {
-            PgPaymentV1Dto.Response pgRes = pgClient.requestPayment(orderResult.userId(), pgRequest);
-        } catch (Exception e) {
-            // [TODO] PG 요청 자체가 실패한 경우 retry 3번 후 그래도 실패하면 주문 상태를 FAILED 로 갱신
-            orderService.updateOrderAsFailed(orderResult.orderId(), orderResult.errorPrice());
-        }
+        pgPaymentRetry.requestPaymentWithRetry(orderResult.userId(), pgRequest);
     }
 }
