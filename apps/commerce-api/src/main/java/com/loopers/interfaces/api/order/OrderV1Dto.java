@@ -4,6 +4,7 @@ import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.OrderResult;
 import com.loopers.application.payment.PaymentFlowType;
 import com.loopers.application.payment.PaymentInfo;
+import com.loopers.domain.order.OrderModel;
 
 import java.util.List;
 
@@ -107,6 +108,25 @@ public class OrderV1Dto {
             );
         }
 
+        /**
+         * 주문 세부정보로 변환합니다.
+         * @param orderModel
+         * @return
+         */
+        public static OrderResponse getOrderDetail(OrderModel orderModel) {
+            return new OrderResponse(
+                    orderModel.getUser().getUserId(),
+                    orderModel.getNormalPrice(),
+                    orderModel.getErrorPrice(),
+                    orderModel.getId(),
+                    orderModel.getStatus().toString(),
+                    0,
+                    0,
+                    null,
+                    null
+            );
+        }
+
     }
 
     /**
@@ -140,4 +160,7 @@ public class OrderV1Dto {
             return new OrderLineResponse(orderLine.productId(), orderLine.quantity());
         }
     }
+
+
+
 }

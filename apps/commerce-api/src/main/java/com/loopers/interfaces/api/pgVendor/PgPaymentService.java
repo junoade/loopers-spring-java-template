@@ -1,6 +1,7 @@
 package com.loopers.interfaces.api.pgVendor;
 
 import com.loopers.application.order.OrderResult;
+import com.loopers.domain.order.OrderService;
 import com.loopers.interfaces.api.order.OrderV1Dto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,4 +31,15 @@ public class PgPaymentService {
         );
         pgPaymentRetry.requestPaymentWithRetry(orderResult.userId(), pgRequest);
     }
+
+    /**
+     * 동기 처리 및 Resilience Retry를 AOP로 호출
+     * @param userId
+     * @param orderId
+     */
+    public void requestPaymentForPendingOrder(String userId, Long orderId) {
+        String paddingId = "00000" + orderId.toString();
+        pgPaymentRetry.requestPaymentForPendingOrder(userId, paddingId);
+    }
+
 }
