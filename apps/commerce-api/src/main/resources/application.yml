@@ -59,6 +59,24 @@ resilience4j:
         ignore-exceptions:            # 재시도 하지 않고 실패 처리할 예외
           - com.loopers.support.error.CoreException
         fail-after-max-attempts: true
+  circuitbreaker:
+    instances:
+      pgCircuit:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5       # 최소 호출건수
+        failure-rate-threshold: 65       # 실패율이 60% 넘으면 Open
+        wait-duration-in-open-state: 10s # Open 상태 유지 시간 (Open->Half Open)
+        permitted-number-of-calls-in-half-open-state: 2 # Half-Open 에서 테스트 -> 성공 Closed / 실패 Open
+        slow-call-duration-threshold: 5s # 느린 응답 임계값
+        slow-call-rate-threshold: 50    # 느린 응답 비율
+        record-exceptions:
+          - feign.RetryableException
+          - feign.FeignException.InternalServerError
+          - feign.FeignException.ServiceUnavailable
+        # 내부 에러는 예외
+        ignore-exceptions:
+          - com.loopers.support.error.CoreException
 
 ---
 spring:

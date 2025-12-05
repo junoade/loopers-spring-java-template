@@ -2,6 +2,7 @@ package com.loopers.interfaces.api.pgVendor;
 
 import com.loopers.domain.order.OrderService;
 import feign.FeignException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +17,13 @@ public class PgPaymentRetry {
 
     /**
      * PG 요청에 대해 Resilience4j Retry 로직
+     * 서킷브레이커 적용
      * @ref application.yml
      * @param request
      * @return
      */
     @Retry(name = "pgPayment", fallbackMethod = "pgPaymentFallback")
+    @CircuitBreaker(name = "pgCircuit", fallbackMethod = "pgPaymentFallback")
     public void requestPaymentWithRetry(String userId, PgPaymentV1Dto.Request request) {
         pgClient.requestPayment(userId, request);
     }
@@ -37,6 +40,7 @@ public class PgPaymentRetry {
 
 
     @Retry(name = "pgPayment", fallbackMethod = "pgPaymentOrderStatusFallback")
+    @CircuitBreaker(name = "pgCircuit", fallbackMethod = "pgPaymentFallback")
     public void requestPaymentForPendingOrder(String userId, String orderId) {
         log.debug("[PG PAYMENT] called for orderId={}", orderId);
         pgClient.requestPaymentWithOrderId(userId, orderId);
