@@ -36,10 +36,10 @@ public class PgCallbackController {
         }
 
         if ("SUCCESS".equals(status)) {
-            orderService.updateOrderStatus(orderId, OrderStatus.SUCCESS);
+            orderService.updateOrderAsSuccess(orderId, callback.amount());
             log.info("OrderId : {}, Order status updated to SUCCESS", orderId);
         } else if("FAILED".equals(status)) {
-            orderService.updateOrderStatus(orderId, OrderStatus.FAILED);
+            orderService.updateOrderAsFailed(orderId, callback.amount());
             log.error("OrderId : {}, Order status updated to Failed Because {}", orderId, callback.reason());
         } else {
             log.error("OrderId : {}, Callback replied unexpected status: {}", orderId, status);
