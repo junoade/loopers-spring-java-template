@@ -77,7 +77,15 @@ resilience4j:
         # 내부 에러는 예외
         ignore-exceptions:
           - com.loopers.support.error.CoreException
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health, metrics, circuitbreakers
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 ---
 spring:
   config:
