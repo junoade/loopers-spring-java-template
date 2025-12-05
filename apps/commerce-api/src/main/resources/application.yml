@@ -42,8 +42,8 @@ cloud:
       config:
         pgClient:
           url: http://localhost:8082
-          connect-timeout: 5000
-          read-timeout: 5000
+          connect-timeout: 2000
+          read-timeout: 6000
 
 ---
 spring:
