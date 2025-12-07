@@ -2,6 +2,9 @@ package com.loopers.interfaces.api.order;
 
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.OrderResult;
+import com.loopers.application.payment.PaymentFlowType;
+import com.loopers.application.payment.PaymentInfo;
+import com.loopers.domain.order.OrderModel;
 
 import java.util.List;
 
@@ -14,7 +17,9 @@ public class OrderV1Dto {
      */
     public record OrderRequest(
             String userId,
-            List<OrderLineRequest> orderLineRequests
+            List<OrderLineRequest> orderLineRequests,
+            PaymentFlowType paymentFlowType,
+            PaymentInfo paymentInfo
     ) {
 
         /**
@@ -25,19 +30,19 @@ public class OrderV1Dto {
             List<OrderCommand.OrderLine> lineCommands = orderLineRequests.stream()
                     .map(OrderLineRequest::toCommand)
                     .toList();
-
             return new OrderCommand.Order(
                     userId,
-                    lineCommands
+                    lineCommands,
+                    paymentFlowType,
+                    paymentInfo
             );
         }
     }
 
-
     public record OrderResponse(
             String userId, // 이용자ID
-            Integer normalPrice,
-            Integer errorPrice,
+            Long normalPrice,
+            Long errorPrice,
             Long orderId, // 실 주문의 경우에만 값 존재
             String status, // 주문 상태
             int successCount,
@@ -95,11 +100,30 @@ public class OrderV1Dto {
                     placeOrderResult.normalPrice(),  // 실제 사용 포인트
                     placeOrderResult.errorPrice(),
                     placeOrderResult.orderId(),                          // 여기서는 포인트 부족이면 예외로 롤백 처리했다고 가정
-                    "ORDERED",
+                    placeOrderResult.orderStatus().toString(),
                     successLines.size(),
                     failedLines.size(),
                     successLines,
                     failedLines
+            );
+        }
+
+        /**
+         * 주문 세부정보로 변환합니다.
+         * @param orderModel
+         * @return
+         */
+        public static OrderResponse getOrderDetail(OrderModel orderModel) {
+            return new OrderResponse(
+                    orderModel.getUser().getUserId(),
+                    orderModel.getNormalPrice(),
+                    orderModel.getErrorPrice(),
+                    orderModel.getId(),
+                    orderModel.getStatus().toString(),
+                    0,
+                    0,
+                    null,
+                    null
             );
         }
 
@@ -136,4 +160,7 @@ public class OrderV1Dto {
             return new OrderLineResponse(orderLine.productId(), orderLine.quantity());
         }
     }
+
+
+
 }

@@ -1,6 +1,8 @@
 package com.loopers.domain.order;
 
 import com.loopers.domain.user.UserModel;
+import com.loopers.support.error.CoreException;
+import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +20,50 @@ public class OrderService {
         return orderRepository.save(orderModel);
     }
 
-    public void updateOrderAsPartialSuccess(OrderModel orderModel, int normalPrice, int errorPrice) {
-        orderModel.updateToPartialSuccess(normalPrice, errorPrice);
+    @Transactional
+    public void updateOrderAsFailed(Long orderId, long errorPrice) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
+        orderModel.updateToFailed(errorPrice);
     }
 
-    public void updateOrderAsSuccess(OrderModel orderModel, int normalPrice) {
+    @Transactional
+    public void updateOrderAsFailed(Long orderId) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
+        orderModel.updateToFailed(orderModel.getTotalPrice());
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isPending(Long orderId) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
+        return orderModel.getStatus() == OrderStatus.PENDING;
+    }
+
+    @Transactional
+    public void updateOrderAsSuccess(Long orderId, long normalPrice) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
         orderModel.updateToSuccess(normalPrice);
     }
 
-    public OrderModel createSuccessOrder(UserModel userModel, List<OrderItemModel> orderItems, int normalPrice) {
+    @Transactional
+    public void updateOrderStatus(Long orderId, OrderStatus status) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
+        orderModel.updateStatus(status);
+    }
+
+    @Transactional
+    public OrderModel createSuccessOrder(UserModel userModel, List<OrderItemModel> orderItems, long normalPrice) {
         OrderModel orderModel = OrderModel.createSuccess(userModel, orderItems, normalPrice);
         return orderRepository.save(orderModel);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderModel getOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
     }
 }

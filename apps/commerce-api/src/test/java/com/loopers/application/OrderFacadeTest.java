@@ -3,6 +3,7 @@ package com.loopers.application;
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.OrderResult;
 import com.loopers.application.order.UserOrderProductFacade;
+import com.loopers.application.payment.PaymentFlowType;
 import com.loopers.domain.brand.BrandModel;
 import com.loopers.domain.brand.BrandRepository;
 import com.loopers.domain.brand.BrandStatus;
@@ -89,7 +90,9 @@ public class OrderFacadeTest {
         OrderCommand.OrderLine line = new OrderCommand.OrderLine(resultProduct.getId(), 1);
         OrderCommand.Order order = new OrderCommand.Order(
                 user.getUserId(),
-                List.of(line)
+                List.of(line),
+                PaymentFlowType.POINT_ONLY,
+                null
         );
 
         // when
@@ -122,7 +125,9 @@ public class OrderFacadeTest {
         OrderCommand.OrderLine line = new OrderCommand.OrderLine(resultProduct.getId(), 1);
         OrderCommand.Order order = new OrderCommand.Order(
                 resultUser.getUserId(),
-                List.of(line)
+                List.of(line),
+                PaymentFlowType.POINT_ONLY,
+                null
         );
 
         // when
@@ -157,7 +162,9 @@ public class OrderFacadeTest {
         OrderCommand.OrderLine line = new OrderCommand.OrderLine(resultProduct.getId(), 1);
         OrderCommand.Order order = new OrderCommand.Order(
                 resultUser.getUserId(),
-                List.of(line)
+                List.of(line),
+                PaymentFlowType.POINT_ONLY,
+                null
         );
 
         // when

@@ -49,6 +49,10 @@ public class OrderItemModel extends BaseEntity {
         this.status = status;
     }
 
+    public OrderItemStatus getStatus() {
+        return status;
+    }
+
     public Integer getPrice() {
         return price;
     }

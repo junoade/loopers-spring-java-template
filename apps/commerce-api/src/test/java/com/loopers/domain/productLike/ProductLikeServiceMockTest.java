@@ -72,6 +72,6 @@ public class ProductLikeServiceMockTest {
 
         // then
         then(productLikeRepository).should()
-                .delete(userPkId, productId);
+                .deleteByUserAndProduct(userPkId, productId);
     }
 }

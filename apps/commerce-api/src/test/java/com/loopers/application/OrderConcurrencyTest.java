@@ -3,6 +3,7 @@ package com.loopers.application;
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.UserOrderProductFacade;
 import com.loopers.application.order.UserOrderProductRetry;
+import com.loopers.application.payment.PaymentFlowType;
 import com.loopers.domain.brand.BrandModel;
 import com.loopers.domain.brand.BrandRepository;
 import com.loopers.domain.brand.BrandStatus;
@@ -109,7 +110,9 @@ public class OrderConcurrencyTest {
 
                     OrderCommand.Order command = new OrderCommand.Order(
                             user.getUserId(),
-                            List.of(line)
+                            List.of(line),
+                            PaymentFlowType.POINT_ONLY,
+                            null
                     );
 
                     userOrderProductRetry.placeOrderWithRetry(command);
@@ -185,7 +188,9 @@ public class OrderConcurrencyTest {
 
                     OrderCommand.Order command = new OrderCommand.Order(
                             user1.getUserId(),
-                            List.of(line)
+                            List.of(line),
+                            PaymentFlowType.POINT_ONLY,
+                            null
                     );
 
                     userOrderProductFacade.placeOrder(command);
@@ -286,7 +291,9 @@ public class OrderConcurrencyTest {
 
                     OrderCommand.Order command = new OrderCommand.Order(
                             userId,
-                            List.of(line)
+                            List.of(line),
+                            PaymentFlowType.POINT_ONLY,
+                            null
                     );
 
                     userOrderProductFacade.placeOrder(command);
