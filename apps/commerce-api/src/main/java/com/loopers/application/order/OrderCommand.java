@@ -1,7 +1,7 @@
 package com.loopers.application.order;
 
-import com.loopers.application.payment.PaymentFlowType;
-import com.loopers.application.payment.PaymentInfo;
+import com.loopers.application.payment.config.PaymentFlowType;
+import com.loopers.application.payment.common.PaymentInfo;
 import com.loopers.domain.order.OrderItemModel;
 
 import java.util.List;

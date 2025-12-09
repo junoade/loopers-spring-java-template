@@ -1,6 +1,7 @@
 package com.loopers.application.order;
 
-import com.loopers.application.payment.PaymentStrategyResolver;
+import com.loopers.application.payment.config.PaymentStrategyResolver;
+import com.loopers.application.payment.dto.PaymentCommand;
 import com.loopers.application.payment.strategy.PaymentStrategy;
 import com.loopers.domain.order.OrderItemModel;
 import com.loopers.domain.order.OrderItemStatus;
@@ -51,6 +52,10 @@ public class UserOrderProductFacade {
      * - 재고가 존재하지 않거나 부족할 경우 주문은 실패
      * - 주문 시 유저의 결제방식은 결제 전략 패턴을 통해 처리합니다
      * - 쿠폰, 재고, 포인트 처리 등 하나라도 작업이 실패하면 모두 롤백처리
+     *
+     * [참고] PaymentStrategy 패턴을 사용합니다.
+     * - POINT_ONLY, PG_ONLY 등의 팡식을 동적으로 결정합니다.
+     * - PG 거래가 껴있는 경우 이벤트 기반으로 PG 결제 요청까지 처리합니다.
      * @param orderCommand
      */
     @Transactional
@@ -66,7 +71,10 @@ public class UserOrderProductFacade {
         }
 
         PaymentStrategy paymentStrategy = paymentStrategyResolver.resolve(orderCommand.paymentFlowType());
-        OrderModel orderModel = paymentStrategy.createOrder(userModel, orderItems, stockResult);
+        PaymentCommand.ProcessPaymentContext contextDto = PaymentCommand.ProcessPaymentContext.of(
+                userModel, orderItems, stockResult, orderCommand.paymentInfo()
+        );
+        OrderModel orderModel = paymentStrategy.processPayment(contextDto);
 
         return OrderResult.PlaceOrderResult.of(
                 userModel.getUserId(),

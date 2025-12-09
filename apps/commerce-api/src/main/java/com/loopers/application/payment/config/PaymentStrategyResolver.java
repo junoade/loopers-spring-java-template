@@ -1,4 +1,4 @@
-package com.loopers.application.payment;
+package com.loopers.application.payment.config;
 
 import com.loopers.application.payment.strategy.PaymentStrategy;
 import com.loopers.support.error.CoreException;

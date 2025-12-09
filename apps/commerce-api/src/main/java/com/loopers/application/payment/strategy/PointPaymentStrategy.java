@@ -1,7 +1,8 @@
 package com.loopers.application.payment.strategy;
 
 import com.loopers.application.order.StockResult;
-import com.loopers.application.payment.PaymentFlowType;
+import com.loopers.application.payment.config.PaymentFlowType;
+import com.loopers.application.payment.dto.PaymentCommand;
 import com.loopers.domain.order.OrderItemModel;
 import com.loopers.domain.order.OrderModel;
 import com.loopers.domain.order.OrderService;
@@ -23,13 +24,15 @@ public class PointPaymentStrategy implements PaymentStrategy {
 
     /**
      * 내부 포인트 결제이고 주문 과정이 정상이면 주문은 바로 성공합니다
-     * @param user
-     * @param items
-     * @param stockResult
-     * @return
+     * @param context
+     * @return OrderModel
      */
     @Override
-    public OrderModel createOrder(UserModel user, List<OrderItemModel> items, StockResult stockResult) {
+    public OrderModel processPayment(PaymentCommand.ProcessPaymentContext context) {
+        UserModel user = context.userModel();
+        List<OrderItemModel> items = context.items();
+        StockResult stockResult = context.stockResult();
+
         int requiringPoints = stockResult.requiringPrice();
 
         if (!user.hasEnoughPoint(requiringPoints)) {

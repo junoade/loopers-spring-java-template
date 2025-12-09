@@ -2,8 +2,8 @@ package com.loopers.interfaces.api.order;
 
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.OrderResult;
-import com.loopers.application.payment.PaymentFlowType;
-import com.loopers.application.payment.PaymentInfo;
+import com.loopers.application.payment.config.PaymentFlowType;
+import com.loopers.application.payment.common.PaymentInfo;
 import com.loopers.domain.order.OrderModel;
 
 import java.util.List;
