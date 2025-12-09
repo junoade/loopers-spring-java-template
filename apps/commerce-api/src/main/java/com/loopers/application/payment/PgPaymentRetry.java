@@ -1,6 +1,9 @@
-package com.loopers.interfaces.api.pgVendor;
+package com.loopers.application.payment;
 
+import com.loopers.application.payment.dto.PgPaymentCommand;
 import com.loopers.domain.order.OrderService;
+import com.loopers.infrastructure.pg.PgClient;
+import com.loopers.interfaces.api.payment.PgPaymentV1Dto;
 import feign.FeignException;
 import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
@@ -21,18 +24,25 @@ public class PgPaymentRetry {
      * PG 요청에 대해 Resilience4j Retry 로직
      * 서킷브레이커 적용
      * @ref application.yml
-     * @param request
+     * @param command
      * @return
      */
     @Retry(name = "pgPayment", fallbackMethod = "pgPaymentFallback")
     @CircuitBreaker(name = "pgCircuit", fallbackMethod = "pgPaymentFallback")
-    public void requestPaymentWithRetry(String userId, PgPaymentV1Dto.Request request) {
-        pgClient.requestPayment(userId, request);
+    public void requestPaymentWithRetry(PgPaymentCommand command) {
+        PgPaymentV1Dto.Request pgRequest = PgPaymentV1Dto.Request.of(
+                "00000" + command.orderId().toString(),
+                command.paymentInfo(),
+                command.amount(),
+                "http://localhost:8080/api/v1/payments/callback"
+        );
+
+        pgClient.requestPayment(command.userId(), pgRequest);
     }
 
-    public void pgPaymentFallback(String userId, PgPaymentV1Dto.Request request, Throwable ex) {
+    public void pgPaymentFallback(PgPaymentCommand command, Throwable ex) {
         log.error("[PG PAYMENT] all retries failed. userId={}, orderId={}, cause={}",
-                userId, request.orderId(), ex.toString());
+                command.userId(), command.orderId(), ex.toString());
 
         // long parseOrderId = Long.parseLong(request.orderId());
         // orderService.updateOrderAsFailed(parseOrderId, request.amount());
@@ -97,9 +107,6 @@ public class PgPaymentRetry {
         // 4) 그 외 알 수 없는 에러
         log.error("[PG][UNKNOWN] unexpected error. userId={}, orderId={}, type={}, msg={}",
                 userId, orderId, ex.getClass().getSimpleName(), ex.getMessage(), ex);
-
-
-
     }
 
 
