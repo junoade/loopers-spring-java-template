@@ -3,11 +3,10 @@ package com.loopers.interfaces.api.order;
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.OrderResult;
 import com.loopers.application.order.UserOrderProductFacade;
-import com.loopers.application.payment.PaymentFlowType;
+import com.loopers.application.payment.PgPaymentService;
 import com.loopers.domain.order.OrderService;
 import com.loopers.domain.order.OrderStatus;
 import com.loopers.interfaces.api.ApiResponse;
-import com.loopers.interfaces.api.pgVendor.PgPaymentService;
 import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +32,6 @@ public class OrderV1Controller implements OrderV1ApiSpec {
     public ApiResponse<OrderV1Dto.OrderResponse> placeOrder(@RequestBody OrderV1Dto.OrderRequest request) {
         OrderCommand.Order orderCmd = request.toCommand();
         OrderResult.PlaceOrderResult placeOrderResult = userOrderProductFacade.placeOrder(orderCmd);
-
-        /**
-         * PG 결제인 경우
-         */
-        if(request.paymentFlowType().equals(PaymentFlowType.PG_ONLY)) {
-            pgPaymentService.requestPaymentForOrder(placeOrderResult, request);
-        }
 
         return ApiResponse.success(OrderV1Dto.OrderResponse.fromOrderPlacement(
                 placeOrderResult
