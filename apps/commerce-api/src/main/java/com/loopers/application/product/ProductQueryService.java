@@ -1,7 +1,6 @@
 package com.loopers.application.product;
 
 import com.loopers.application.like.ProductLikeQueryRepository;
-import com.loopers.application.tracking.UserActionPublisher;
 import com.loopers.domain.product.ProductSortType;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProductQueryService {
     private final ProductLikeQueryRepository ProductLikeQuery;
-    private final UserActionPublisher userActionPublisher;
 
     @Transactional(readOnly = true)
     public ProductLikeSummary getProductLikeSummary(Long productId) {
