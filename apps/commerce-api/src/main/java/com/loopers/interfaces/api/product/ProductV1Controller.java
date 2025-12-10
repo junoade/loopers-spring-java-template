@@ -37,7 +37,7 @@ public class ProductV1Controller implements ProductV1ApiSpec{
     @TrackUserAction(
             actionType = UserActionType.PRODUCT_VIEW,
             entityType = "PRODUCT",
-            entityId = "#productId"
+            entityId = "#p0"
     )
     public ApiResponse<ProductV1Dto.ProductDetailResponse<ProductLikeSummary>> getProductDetail(@PathVariable("productId") Long productId) {
         ProductLikeSummary productLikeSummary = productQueryService.getProductLikeSummary(productId);

@@ -10,11 +10,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.expression.MethodBasedEvaluationContext;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +28,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserActionTrackingAspect {
     private final ApplicationEventPublisher eventPublisher;
+
+    private static final ExpressionParser PARSER = new SpelExpressionParser();
+    private static final DefaultParameterNameDiscoverer NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
 
     @Around("@annotation(track)")
     public Object track(ProceedingJoinPoint joinPoint, TrackUserAction track) throws Throwable {
@@ -55,19 +61,18 @@ public class UserActionTrackingAspect {
             return null;
         }
 
-        ExpressionParser parser = new SpelExpressionParser();
-        StandardEvaluationContext context = new StandardEvaluationContext();
-
-        Object[] args = joinPoint.getArgs();
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        String[] paramNames = signature.getParameterNames();
+        Method method = signature.getMethod();
 
-        for (int i = 0; i < paramNames.length; i++) {
-            context.setVariable(paramNames[i], args[i]);   // 예: #productId = 10
-        }
+        // Spring이 알아서 파라미터 이름/값을 컨텍스트에 넣어줌
+        EvaluationContext context = new MethodBasedEvaluationContext(
+                null,                // root object (필요 없으면 null)
+                method,
+                joinPoint.getArgs(),
+                NAME_DISCOVERER
+        );
 
-        Object value = parser.parseExpression(expression).getValue(context);
-
+        Object value = PARSER.parseExpression(expression).getValue(context);
         return value != null ? value.toString() : null;
     }
 }
