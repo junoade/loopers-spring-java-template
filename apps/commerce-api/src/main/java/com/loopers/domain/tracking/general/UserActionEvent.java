@@ -1,4 +1,4 @@
-package com.loopers.domain.tracking;
+package com.loopers.domain.tracking.general;
 
 import java.time.Instant;
 import java.util.Map;

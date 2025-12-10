@@ -1,4 +1,4 @@
-package com.loopers.domain.tracking;
+package com.loopers.domain.tracking.general;
 
 /**
  * 공통 유저 행동 이벤트 모델을 정의합니다.

@@ -1,4 +1,4 @@
-package com.loopers.domain.tracking;
+package com.loopers.domain.tracking.general;
 
 /**
  * 내부 시스템에서 발생한 이벤트에 대한 액터 타입을 정의합니다.
