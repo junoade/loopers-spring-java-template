@@ -53,7 +53,8 @@ public class CouponModel extends BaseEntity {
     protected CouponModel() {}
 
     /**
-     * 단순 주문 금액 기준 할인 계산 (MVP용)
+     * 단순 주문 금액 기준 할인 금액 계산
+     * [주의] - 할인된 총 금액이 아닙니다
      */
     public long calculateDiscount(long orderAmount) {
         long discount;
@@ -62,7 +63,7 @@ public class CouponModel extends BaseEntity {
         } else { // PERCENT
             discount = orderAmount * discountValue / 100;
         }
-        return Math.max(discount, 0);
+        return discount;
     }
 
     public boolean isStatusActive() {

@@ -47,7 +47,8 @@ public class CouponService {
     }
 
     /**
-     * 주문 금액 기준으로 이 쿠폰이 줄 수 있는 할인 금액 계산
+     * 주문 금액 기준으로 이 쿠폰이 줄 수 있는 할인금액을 반환합니다.
+     * - [주의] 할인된 총금액이 아닙니다.
      */
     public long calculateDiscount(Long couponId, long orderAmount) {
         CouponModel coupon = couponRepository.findById(couponId)
