@@ -1,6 +1,5 @@
-package com.loopers.infrastructure.tracking.outbox;
+package com.loopers.infrastructure.outbox;
 
-import com.loopers.domain.tracking.order.OrderEventOutboxEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderEventOutboxRepository extends JpaRepository<OrderEventOutboxEntity, Long> {

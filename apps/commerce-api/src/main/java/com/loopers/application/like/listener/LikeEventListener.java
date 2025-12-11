@@ -1,6 +1,8 @@
-package com.loopers.application.like.event;
+package com.loopers.application.like.listener;
 
+import com.loopers.application.like.event.ProductLikeEvent;
 import com.loopers.domain.product.ProductService;
+import com.loopers.domain.like.event.LikeEventType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
-package com.loopers.interfaces.api.tracking;
+package com.loopers.support.tracking.aspect;
 
-import com.loopers.domain.tracking.general.EventActorType;
-import com.loopers.domain.tracking.general.TrackUserAction;
-import com.loopers.domain.tracking.general.UserActionEvent;
+import com.loopers.support.tracking.general.EventActorType;
+import com.loopers.support.tracking.annotation.TrackUserAction;
+import com.loopers.support.tracking.general.UserActionEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

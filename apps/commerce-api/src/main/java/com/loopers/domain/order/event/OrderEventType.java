@@ -1,4 +1,4 @@
-package com.loopers.domain.tracking.order;
+package com.loopers.domain.order.event;
 
 public enum OrderEventType {
     ORDER_CREATED,

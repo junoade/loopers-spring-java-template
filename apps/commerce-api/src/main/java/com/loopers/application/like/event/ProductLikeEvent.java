@@ -1,5 +1,6 @@
 package com.loopers.application.like.event;
 
+import com.loopers.domain.like.event.LikeEventType;
 import org.slf4j.MDC;
 
 import java.time.Instant;

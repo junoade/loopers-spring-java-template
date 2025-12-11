@@ -1,7 +1,7 @@
 package com.loopers.domain.order;
 
-import com.loopers.domain.tracking.order.OrderEventType;
-import com.loopers.domain.tracking.order.PublishOrderEvent;
+import com.loopers.domain.order.event.OrderEventType;
+import com.loopers.support.tracking.annotation.PublishOrderEvent;
 import com.loopers.domain.user.UserModel;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;

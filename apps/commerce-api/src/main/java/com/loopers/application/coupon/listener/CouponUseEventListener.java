@@ -1,8 +1,8 @@
-package com.loopers.application.coupon.event;
+package com.loopers.application.coupon.listener;
 
 import com.loopers.application.coupon.CouponAssignService;
-import com.loopers.domain.tracking.order.OrderEventPayload;
-import com.loopers.domain.tracking.order.OrderEventType;
+import com.loopers.domain.order.event.OrderEventPayload;
+import com.loopers.domain.order.event.OrderEventType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
