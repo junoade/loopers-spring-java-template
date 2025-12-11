@@ -1,9 +1,9 @@
-package com.loopers.interfaces.api.tracking.outbox;
+package com.loopers.application.order.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loopers.domain.tracking.order.OrderEventOutboxEntity;
-import com.loopers.domain.tracking.order.OrderEventPayload;
-import com.loopers.infrastructure.tracking.outbox.OrderEventOutboxRepository;
+import com.loopers.infrastructure.outbox.OrderEventOutboxEntity;
+import com.loopers.domain.order.event.OrderEventPayload;
+import com.loopers.infrastructure.outbox.OrderEventOutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

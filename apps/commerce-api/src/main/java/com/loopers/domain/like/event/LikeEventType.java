@@ -1,4 +1,4 @@
-package com.loopers.application.like.event;
+package com.loopers.domain.like.event;
 
 public enum LikeEventType {
     LIKE_CREATED,

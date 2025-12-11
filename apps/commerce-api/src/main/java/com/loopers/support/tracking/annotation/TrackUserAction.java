@@ -1,4 +1,6 @@
-package com.loopers.domain.tracking.general;
+package com.loopers.support.tracking.annotation;
+
+import com.loopers.support.tracking.general.UserActionType;
 
 import java.lang.annotation.*;
 

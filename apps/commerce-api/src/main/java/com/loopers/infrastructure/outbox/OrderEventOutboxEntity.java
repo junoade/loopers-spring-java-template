@@ -1,4 +1,4 @@
-package com.loopers.domain.tracking.order;
+package com.loopers.infrastructure.outbox;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

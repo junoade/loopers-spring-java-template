@@ -1,11 +1,11 @@
-package com.loopers.interfaces.api.tracking;
+package com.loopers.support.tracking.aspect;
 
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.OrderResult;
 import com.loopers.domain.order.OrderModel;
-import com.loopers.domain.tracking.order.OrderEventPayload;
-import com.loopers.domain.tracking.order.OrderEventType;
-import com.loopers.domain.tracking.order.PublishOrderEvent;
+import com.loopers.domain.order.event.OrderEventPayload;
+import com.loopers.domain.order.event.OrderEventType;
+import com.loopers.support.tracking.annotation.PublishOrderEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

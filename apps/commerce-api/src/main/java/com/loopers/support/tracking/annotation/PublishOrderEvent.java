@@ -1,4 +1,6 @@
-package com.loopers.domain.tracking.order;
+package com.loopers.support.tracking.annotation;
+
+import com.loopers.domain.order.event.OrderEventType;
 
 import java.lang.annotation.*;
 

@@ -1,6 +1,7 @@
-package com.loopers.application.payment.event;
+package com.loopers.application.payment.listener;
 
 import com.loopers.application.payment.PgPaymentService;
+import com.loopers.application.payment.event.PgPaymentRequestedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

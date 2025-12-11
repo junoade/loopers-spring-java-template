@@ -1,6 +1,6 @@
 package com.loopers.application.like;
 
-import com.loopers.application.like.event.LikeEventType;
+import com.loopers.domain.like.event.LikeEventType;
 import com.loopers.application.like.event.ProductLikeEvent;
 import com.loopers.domain.like.ProductLikeService;
 import com.loopers.domain.product.ProductModel;
