@@ -87,12 +87,43 @@ erDiagram
         TIMESTAMP updated_at
     }
 
-    %% Relationships
+    COUPONS {
+        BIGINT id PK
+        VARCHAR(50)  coupon_code
+        VARCHAR(100) name
+        VARCHAR(20)  discount_type  
+        INT          discount_value  
+        TIMESTAMP    valid_from
+        TIMESTAMP    valid_to
+        VARCHAR(20)  status   
+        TIMESTAMP    created_at
+        TIMESTAMP    updated_at
+    }
+
+    ASSIGNED_COUPONS {
+        BIGINT id PK
+        BIGINT coupon_id   FK
+        BIGINT user_pk_id  FK
+        VARCHAR(20) status  
+        TIMESTAMP issued_at
+        TIMESTAMP used_at
+        TIMESTAMP expired_at
+        BIGINT    order_id
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+
+%% Relationships
     USER ||--o{ ORDERS : "주문"
     ORDERS ||--|{ ORDERS_ITEM : "주문 내용"
     PRODUCT ||--o{ ORDERS_ITEM : "주문된 제품"
     USER ||--o{ PRODUCT_LIKE : "좋아요"
     PRODUCT ||--o{ PRODUCT_LIKE : "좋아요된 상품"
     BRAND ||--o{ PRODUCT : "자사 상품"
+
+%% 신규추가
+    USER ||--o{ ASSIGNED_COUPONS : "has"
+    COUPONS ||--o{ ASSIGNED_COUPONS : "assigned"
+    
 
 ```
