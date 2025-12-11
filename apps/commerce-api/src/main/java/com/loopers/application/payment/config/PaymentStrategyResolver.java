@@ -19,4 +19,17 @@ public class PaymentStrategyResolver {
                 .findFirst()
                 .orElseThrow(() -> new CoreException(ErrorType.BAD_REQUEST, "올바르지 않은 결제 방식입니다."));
     }
+
+    /**
+     * [2025.12.12] 할인 후 결제금액이 0원인 경우 POINT_ONLY 로직으로 처리합니다.
+     * @param paymentFlowType
+     * @param requiringPoints
+     * @return
+     */
+    public PaymentStrategy resolveRequiringPoints(PaymentFlowType paymentFlowType, long requiringPoints) {
+        if(requiringPoints == 0) {
+            return resolve(PaymentFlowType.POINT_ONLY);
+        }
+        return resolve(paymentFlowType);
+    }
 }

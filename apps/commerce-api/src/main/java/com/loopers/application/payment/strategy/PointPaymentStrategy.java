@@ -11,10 +11,12 @@ import com.loopers.domain.user.UserService;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PointPaymentStrategy implements PaymentStrategy {
@@ -33,9 +35,10 @@ public class PointPaymentStrategy implements PaymentStrategy {
         List<OrderItemModel> items = context.items();
         StockResult stockResult = context.stockResult();
 
-        int requiringPoints = stockResult.requiringPrice();
+        long requiringPoints = stockResult.requiringPrice();
 
         if (!user.hasEnoughPoint(requiringPoints)) {
+            log.error("잔액 : {} / 결제금액 : {}", user.getPoint(), requiringPoints);
             throw new CoreException(ErrorType.BAD_REQUEST, "포인트가 부족합니다. 다시 확인해주세요!");
         }
         userService.decreaseUserPoint(user.getId(), requiringPoints);
