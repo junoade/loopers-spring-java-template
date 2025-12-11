@@ -23,12 +23,12 @@ public class UserModel extends BaseEntity {
     private String email;
     private String birthDate;
     private String gender;
-    private Integer point;
+    private Long point;
 
     protected UserModel() {}
     
     public UserModel(String userId, String name, String description, String email
-            , String birthDate, String gender, Integer point) {
+            , String birthDate, String gender, Long point) {
         validateUserId(userId);
         validateName(name);
         validateEmail(email);
@@ -46,7 +46,7 @@ public class UserModel extends BaseEntity {
     }
 
     public UserModel(String userId, String name, String description, String email, String birthDate, String gender) {
-        this(userId, name, description, email, birthDate, gender, 0);
+        this(userId, name, description, email, birthDate, gender, 0L);
     }
 
     public void updateDescription(String newDescription) {
@@ -56,17 +56,17 @@ public class UserModel extends BaseEntity {
         this.description = newDescription;
     }
 
-    public void updatePoint(Integer newPoint) {
+    public void updatePoint(Long newPoint) {
         validateChargePoint(newPoint);
         this.point +=  newPoint;
     }
 
-    public void decreasePoint(Integer decreasePoint) {
+    public void decreasePoint(Long decreasePoint) {
         hasEnoughPoint(decreasePoint);
         this.point -= decreasePoint;
     }
 
-    public boolean hasEnoughPoint(Integer decreasePoint) {
+    public boolean hasEnoughPoint(Long decreasePoint) {
         validatePositivePoint(decreasePoint);
         return this.point >= decreasePoint;
     }
@@ -113,19 +113,19 @@ public class UserModel extends BaseEntity {
         }
     }
 
-    private void validateInitPoint(Integer point) {
+    private void validateInitPoint(Long point) {
         if (point == null || point < 0) {
             throw new CoreException(ErrorType.BAD_REQUEST, "신규 포인트는 음수일 수 없습니다.");
         }
     }
 
-    private void validateChargePoint(Integer point) {
+    private void validateChargePoint(Long point) {
         if (point == null || point <= 0) {
             throw new CoreException(ErrorType.BAD_REQUEST, "충전 포인트는 0 이하일 수 없습니다.");
         }
     }
 
-    private void validatePositivePoint(Integer point) {
+    private void validatePositivePoint(Long point) {
         if (point == null || point < 0) {
             throw new CoreException(ErrorType.BAD_REQUEST, "포인트는 양수로 입력되어야 합니다.");
         }
@@ -159,7 +159,7 @@ public class UserModel extends BaseEntity {
         return gender;
     }
 
-    public Integer getPoint() {
+    public Long getPoint() {
         return point;
     }
 }

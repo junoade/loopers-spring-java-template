@@ -42,14 +42,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Integer getUserPoint(String userId) {
+    public Long getUserPoint(String userId) {
         return userRepository.findByUserId(userId)
                 .map(UserModel::getPoint)
                 .orElse(null);
     }
 
     @Transactional
-    public Integer chargePoint(String userId, Integer point) {
+    public Long chargePoint(String userId, Long point) {
         UserModel user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "이용자ID를 확인해주세요."));
         user.updatePoint(point);
@@ -64,7 +64,7 @@ public class UserService {
      * @param totalAmountPoint
      */
     @Transactional
-    public void decreaseUserPoint(Long userPkId, Integer totalAmountPoint) {
+    public void decreaseUserPoint(Long userPkId, Long totalAmountPoint) {
         UserModel user = userRepository.findByIdForUpdate(userPkId)
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND, "이용자 정보를 확인해주세요"));
         user.decreasePoint(totalAmountPoint);

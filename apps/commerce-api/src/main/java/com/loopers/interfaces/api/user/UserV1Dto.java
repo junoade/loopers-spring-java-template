@@ -12,7 +12,7 @@ public class UserV1Dto {
             String email,
             String birthDate,
             String gender,
-            Integer point
+            Long point
     ) {
         /**
          * interfaces -> application 의존 OK(안쪽 의존)
@@ -26,7 +26,7 @@ public class UserV1Dto {
 
     public record UserPointChargeRequest(
             String userId,
-            Integer point
+            Long point
     ) {
     }
 
@@ -37,7 +37,7 @@ public class UserV1Dto {
             String email,
             String birthDate,
             String gender,
-            Integer point
+            Long point
     ) {
         public static UserResponse from(UserInfo info) {
             return new UserResponse(

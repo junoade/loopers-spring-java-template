@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductQueryService {
     private final ProductLikeQueryRepository ProductLikeQuery;
 
-
     @Transactional(readOnly = true)
     public ProductLikeSummary getProductLikeSummary(Long productId) {
         return ProductLikeQuery.findProductDetail(productId)

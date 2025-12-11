@@ -37,12 +37,12 @@ public class UserFacade {
     }
 
     @Transactional(readOnly = true)
-    public Integer getUserPoint(String userId) {
+    public Long getUserPoint(String userId) {
         return userService.getUserPoint(userId);
     }
 
     @Transactional
-    public Integer chargeUserPoint(String userId, Integer point) {
+    public Long chargeUserPoint(String userId, Long point) {
         return userService.chargePoint(userId, point);
     }
 }
