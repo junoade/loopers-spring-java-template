@@ -55,6 +55,8 @@ public class AssignedCouponModel {
         this.issuedAt = ZonedDateTime.now();
     }
 
+    protected AssignedCouponModel() {}
+
     public boolean isStatusUsable() {
         return status == AssignedCouponStatus.ISSUED;
     }
