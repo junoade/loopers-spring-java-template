@@ -20,6 +20,11 @@ public class OrderEventOutboxListener {
     private final OrderEventOutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 주문, 결제 결과에 대한 데이터플랫폼 전송을 위한 후속처리
+     * - [2025.12.12] outbox 테이블 내 insert
+     * @param payload
+     */
     @TransactionalEventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onOrderEvent(OrderEventPayload payload) {
