@@ -12,5 +12,6 @@ public record OrderEventPayload(
    Long totalPrice,
    OrderStatus status,
    List<Long> productIds,
-   Instant occurredAt
+   Instant occurredAt,
+   Long couponId
 ) { }

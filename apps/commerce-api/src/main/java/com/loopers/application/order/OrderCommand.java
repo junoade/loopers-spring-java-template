@@ -17,7 +17,8 @@ public class OrderCommand {
         String userId,
         List<OrderLine> orderLineRequests,
         PaymentFlowType paymentFlowType,
-        PaymentInfo paymentInfo
+        PaymentInfo paymentInfo,
+        Long couponId
     ) { }
 
     /**

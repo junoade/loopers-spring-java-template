@@ -70,7 +70,8 @@ public class OrderEventPublishingAspect {
                 order.normalPrice(),
                 order.orderStatus(),
                 productIds,
-                Instant.now()
+                Instant.now(),
+                order.couponId()
         );
     }
 
@@ -84,7 +85,8 @@ public class OrderEventPublishingAspect {
                 order.getOrderItems().stream()
                         .map(p->p.getProduct().getId())
                         .collect(Collectors.toList()),
-                Instant.now()
+                Instant.now(),
+                null
         );
     }
 }

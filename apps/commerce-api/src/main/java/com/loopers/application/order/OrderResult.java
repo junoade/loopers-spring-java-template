@@ -26,7 +26,8 @@ public class OrderResult {
             long errorPrice,
             OrderStatus orderStatus,
             List<OrderCommand.OrderLine> successLines,
-            List<OrderCommand.OrderLine> failedLines
+            List<OrderCommand.OrderLine> failedLines,
+            Long couponId
     ) {
         public static PlaceOrderResult of(String userId,
                                           Long orderId,
@@ -34,7 +35,8 @@ public class OrderResult {
                                           long errorPrice,
                                         OrderStatus orderStatus,
                                         List<OrderCommand.OrderLine> successLines,
-                                        List<OrderCommand.OrderLine> failedLines) {
+                                        List<OrderCommand.OrderLine> failedLines,
+                                          Long couponId) {
             return new PlaceOrderResult(
                     userId,
                     orderId,
@@ -42,7 +44,8 @@ public class OrderResult {
                     errorPrice,
                     orderStatus,
                     successLines,
-                    failedLines);
+                    failedLines,
+                    couponId);
         }
     }
 
