@@ -2,8 +2,6 @@ package com.loopers.application;
 
 import com.loopers.application.like.LikeCommand;
 import com.loopers.application.like.UserLikeProductFacade;
-import com.loopers.application.order.OrderCommand;
-import com.loopers.application.order.UserOrderProductFacade;
 import com.loopers.domain.brand.BrandModel;
 import com.loopers.domain.brand.BrandRepository;
 import com.loopers.domain.brand.BrandStatus;
@@ -75,7 +73,7 @@ public class LikeConcurrencyTest {
         // given
         int initStock = 10;
         int orderQty = 1;
-        int initPoint = 100_000;
+        long initPoint = 100_000L;
         int productPrice = 5_000;
 
         int userCount = 10;   // 유저/쓰레드 수

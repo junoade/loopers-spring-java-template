@@ -13,7 +13,7 @@ public class UserCommand {
             String email,
             String birthDate,
             String gender,
-            Integer point
+            Long point
     ) {
         public UserModel toModel() {
             return new UserModel(

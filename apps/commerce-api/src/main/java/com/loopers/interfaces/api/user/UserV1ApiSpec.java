@@ -44,7 +44,7 @@ public interface UserV1ApiSpec {
             summary = "포인트 조회",
             description = "userId에 대한 현재 포인트를 조회합니다."
     )
-    ApiResponse<Integer> getUserPoint (
+    ApiResponse<Long> getUserPoint (
             @Schema(name = "userId",
                     description = "조회할 예시의 ID",
                     example = "ajchoi0928")
@@ -56,7 +56,7 @@ public interface UserV1ApiSpec {
             summary = "포인트 충전",
             description = "UserV1Dto.UserPointChargeRequest 포맷으로 포인트 충전을 처리합니다"
     )
-    ApiResponse<Integer> chargeUserPoint (
+    ApiResponse<Long> chargeUserPoint (
             @Schema(name = "",
                     description = "이용자ID, 충전금액",
                     example = "ajchoi0928, 500")
