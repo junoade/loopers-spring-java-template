@@ -1,5 +1,7 @@
 package com.loopers.domain.order;
 
+import com.loopers.domain.order.event.OrderEventType;
+import com.loopers.support.tracking.annotation.PublishOrderEvent;
 import com.loopers.domain.user.UserModel;
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
@@ -21,17 +23,21 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderAsFailed(Long orderId, long errorPrice) {
+    @PublishOrderEvent(OrderEventType.ORDER_FAILED)
+    public OrderModel updateOrderAsFailed(Long orderId, long errorPrice) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
         orderModel.updateToFailed(errorPrice);
+        return orderModel;
     }
 
     @Transactional
-    public void updateOrderAsFailed(Long orderId) {
+    @PublishOrderEvent(OrderEventType.ORDER_FAILED)
+    public OrderModel updateOrderAsFailed(Long orderId) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
         orderModel.updateToFailed(orderModel.getTotalPrice());
+        return orderModel;
     }
 
     @Transactional(readOnly = true)
@@ -42,10 +48,12 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderAsSuccess(Long orderId, long normalPrice) {
+    @PublishOrderEvent(OrderEventType.ORDER_PAID)
+    public OrderModel updateOrderAsSuccess(Long orderId, long normalPrice) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CoreException(ErrorType.NOT_FOUND));
         orderModel.updateToSuccess(normalPrice);
+        return orderModel;
     }
 
     @Transactional

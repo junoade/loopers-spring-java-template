@@ -1,5 +1,6 @@
-package com.loopers.interfaces.api.pgVendor;
+package com.loopers.infrastructure.pg;
 
+import com.loopers.interfaces.api.payment.PgPaymentV1Dto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

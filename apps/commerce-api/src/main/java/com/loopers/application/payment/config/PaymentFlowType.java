@@ -1,4 +1,4 @@
-package com.loopers.application.payment;
+package com.loopers.application.payment.config;
 
 /**
  * 결제 방식에 대한 애플리케이션 정책을 결정합니다

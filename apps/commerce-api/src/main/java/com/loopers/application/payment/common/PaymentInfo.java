@@ -1,4 +1,4 @@
-package com.loopers.application.payment;
+package com.loopers.application.payment.common;
 
 public record PaymentInfo(
     String cardType,

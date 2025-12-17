@@ -2,8 +2,8 @@ package com.loopers.interfaces.api.order;
 
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.OrderResult;
-import com.loopers.application.payment.PaymentFlowType;
-import com.loopers.application.payment.PaymentInfo;
+import com.loopers.application.payment.config.PaymentFlowType;
+import com.loopers.application.payment.common.PaymentInfo;
 import com.loopers.domain.order.OrderModel;
 
 import java.util.List;
@@ -19,7 +19,8 @@ public class OrderV1Dto {
             String userId,
             List<OrderLineRequest> orderLineRequests,
             PaymentFlowType paymentFlowType,
-            PaymentInfo paymentInfo
+            PaymentInfo paymentInfo,
+            Long couponId
     ) {
 
         /**
@@ -34,7 +35,8 @@ public class OrderV1Dto {
                     userId,
                     lineCommands,
                     paymentFlowType,
-                    paymentInfo
+                    paymentInfo,
+                    couponId
             );
         }
     }
@@ -48,7 +50,7 @@ public class OrderV1Dto {
             int successCount,
             int failureCount,
             List<OrderLineResponse> successLines, // 정상 주문 가능한 라인
-            List<OrderLineResponse> failedLines // 재고 부족 등의 이유로 실패한 라인
+            List<OrderLineResponse> failedLines // 재고 부족 등의 이유로 실패한 라인,
     ) {
 
         /**

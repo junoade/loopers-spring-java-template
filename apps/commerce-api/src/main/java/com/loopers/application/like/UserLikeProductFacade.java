@@ -1,5 +1,7 @@
 package com.loopers.application.like;
 
+import com.loopers.domain.like.event.LikeEventType;
+import com.loopers.application.like.event.ProductLikeEvent;
 import com.loopers.domain.like.ProductLikeService;
 import com.loopers.domain.product.ProductModel;
 import com.loopers.domain.product.ProductService;
@@ -7,7 +9,7 @@ import com.loopers.domain.user.UserModel;
 import com.loopers.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ public class UserLikeProductFacade {
     private final UserService userService;
     private final ProductLikeService productLikeService;
     private final ProductService productService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @CacheEvict(cacheNames = "productLikeSummary", allEntries = true)
     @Transactional
@@ -26,7 +29,8 @@ public class UserLikeProductFacade {
         productService.validateProductDeleteOrStopSelling(product);
         int resultRow = productLikeService.like(found.getId(), input.productId());
         if(resultRow == 1) {
-            productService.increaseProductLikeCount(product.getId());
+            ProductLikeEvent userLikeEvent = ProductLikeEvent.from(found.getId(), input.productId(), LikeEventType.LIKE_CREATED);
+            eventPublisher.publishEvent(userLikeEvent);
         }
     }
 
@@ -38,7 +42,9 @@ public class UserLikeProductFacade {
         productService.validateProductDeleteOrStopSelling(product);
         int resultRow = productLikeService.dislike(found.getId(), product.getId());
         if(resultRow == 1) {
-            productService.decreaseProductLikeCount(product.getId());
+            ProductLikeEvent userLikeEvent = ProductLikeEvent.from(found.getId(), input.productId(), LikeEventType.LIKE_DELETED);
+            eventPublisher.publishEvent(userLikeEvent);
         }
     }
+
 }

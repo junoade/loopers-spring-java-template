@@ -9,7 +9,7 @@ public record UserInfo(
         String email,
         String birthDate,
         String gender,
-        Integer point) {
+        Long point) {
     public static UserInfo from(UserModel model) {
         return new UserInfo(
             model.getUserId(),

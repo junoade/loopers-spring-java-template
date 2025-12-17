@@ -1,14 +1,15 @@
 package com.loopers.interfaces.api.product;
 
-import com.loopers.application.product.ProductQueryService;
 import com.loopers.application.product.ProductLikeSummary;
+import com.loopers.application.product.ProductQueryService;
 import com.loopers.domain.product.ProductSortType;
+import com.loopers.support.tracking.general.UserActionType;
 import com.loopers.interfaces.api.ApiResponse;
+import com.loopers.support.tracking.annotation.TrackUserAction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -19,6 +20,10 @@ public class ProductV1Controller implements ProductV1ApiSpec{
 
     @Override
     @GetMapping
+    @TrackUserAction(
+            actionType = UserActionType.PRODUCT_LIST_VIEW,
+            entityType = "PRODUCT"
+    )
     public ApiResponse<ProductV1Dto.ProductListResponse<ProductLikeSummary>> getProducts(@RequestParam(required = false, name = "brandId")
                                                                                              Long brandId,
                                             @RequestParam(defaultValue = "DEFAULT", name = "sortType") ProductSortType sortType,
@@ -29,6 +34,11 @@ public class ProductV1Controller implements ProductV1ApiSpec{
 
     @Override
     @GetMapping("/{productId}")
+    @TrackUserAction(
+            actionType = UserActionType.PRODUCT_VIEW,
+            entityType = "PRODUCT",
+            entityId = "#p0"
+    )
     public ApiResponse<ProductV1Dto.ProductDetailResponse<ProductLikeSummary>> getProductDetail(@PathVariable("productId") Long productId) {
         ProductLikeSummary productLikeSummary = productQueryService.getProductLikeSummary(productId);
 

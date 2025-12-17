@@ -1,6 +1,6 @@
-package com.loopers.interfaces.api.pgVendor;
+package com.loopers.interfaces.api.payment;
 
-import com.loopers.application.payment.PaymentInfo;
+import com.loopers.application.payment.common.PaymentInfo;
 
 public class PgPaymentV1Dto {
 

@@ -1,7 +1,6 @@
-package com.loopers.interfaces.api.pgVendor;
+package com.loopers.interfaces.api.payment;
 
 import com.loopers.domain.order.OrderService;
-import com.loopers.domain.order.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
-public class PgCallbackController {
+public class PaymentController {
     private final OrderService orderService;
 
     @PostMapping("/callback")

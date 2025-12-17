@@ -1,4 +1,4 @@
-package com.loopers.interfaces.api.pgVendor;
+package com.loopers.infrastructure.pg;
 
 import feign.Client;
 import org.springframework.context.annotation.Bean;

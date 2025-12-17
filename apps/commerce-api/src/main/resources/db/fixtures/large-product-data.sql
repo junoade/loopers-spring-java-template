@@ -118,3 +118,48 @@ JOIN (
     SELECT 5
 ) x ON 1 = 1
 WHERE n.n <= 1000000;
+
+-- 6) 쿠폰 테스트 데이터 INSERT 시작 / Coupon 100개 생성
+INSERT INTO coupons (
+    coupon_code,
+    name,
+    discount_type,
+    discount_value,
+    status,
+    created_at,
+    updated_at
+)
+SELECT
+    CONCAT('COUPON_', n) AS coupon_code,
+    CONCAT('샘플 쿠폰 ', n) AS name,
+    CASE
+        WHEN RAND() < 0.5 THEN 'FIXED'
+        ELSE 'PERCENT'
+        END AS discount_type,
+    -- FIXED in [1000,10000]
+    -- PERCENT in [5%,20%]
+    CASE
+        WHEN RAND() < 0.5 THEN FLOOR(RAND() * 9000) + 1000
+        ELSE FLOOR(RAND() * 16) + 5
+        END AS discount_value,
+    -- 퍼센트 할인 쿠폰일 경우 최대 할인 3000~20000, 아니면 NULL
+    'ACTIVE' AS status,
+    NOW() AS created_at,
+    NOW() AS updated_at
+FROM numbers
+WHERE n <= 100;
+
+-- 7) 10만명 유저에게 쿠폰 1개씩 랜덤 발급
+INSERT INTO assigned_coupons (
+    coupon_id,
+    user_pk_id,
+    status,
+    issued_at
+)
+SELECT
+    ((n % 100) + 1) AS coupon_id,  -- 쿠폰 100개 중 하나
+    n AS user_pk_id,              -- [1, 100000]
+    'ISSUED' AS status,
+    NOW() - INTERVAL FLOOR(RAND() * 30) DAY AS issued_at
+FROM numbers
+WHERE n <= 100000;

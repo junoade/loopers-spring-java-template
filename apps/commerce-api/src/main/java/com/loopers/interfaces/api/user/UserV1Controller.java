@@ -36,7 +36,7 @@ public class UserV1Controller implements UserV1ApiSpec {
 
     @GetMapping("/{userId}/point")
     @Override
-    public ApiResponse<Integer> getUserPoint(
+    public ApiResponse<Long> getUserPoint(
             @PathVariable("userId") String userId,
             @RequestHeader(value = "X-USER-ID", required = true) String xUserId) {
 
@@ -48,17 +48,17 @@ public class UserV1Controller implements UserV1ApiSpec {
             throw new CoreException(ErrorType.BAD_REQUEST, "X-USER-ID and user ID do not match");
         }
 
-        Integer userPoint = userFacade.getUserPoint(userId);
+        Long userPoint = userFacade.getUserPoint(userId);
         return ApiResponse.success(userPoint);
     }
 
     @PutMapping("/chargePoint")
     @Override
-    public ApiResponse<Integer> chargeUserPoint(
+    public ApiResponse<Long> chargeUserPoint(
             @RequestBody @Valid UserV1Dto.UserPointChargeRequest request) {
         String userId = request.userId();
-        Integer newPoint = request.point();
-        Integer totalPoint = userFacade.chargeUserPoint(userId, newPoint);
+        Long newPoint = request.point();
+        Long totalPoint = userFacade.chargeUserPoint(userId, newPoint);
 
         return ApiResponse.success(totalPoint);
     }

@@ -3,7 +3,7 @@ package com.loopers.application;
 import com.loopers.application.order.OrderCommand;
 import com.loopers.application.order.UserOrderProductFacade;
 import com.loopers.application.order.UserOrderProductRetry;
-import com.loopers.application.payment.PaymentFlowType;
+import com.loopers.application.payment.config.PaymentFlowType;
 import com.loopers.domain.brand.BrandModel;
 import com.loopers.domain.brand.BrandRepository;
 import com.loopers.domain.brand.BrandStatus;
