@@ -58,8 +58,4 @@ public class OrderEventOutboxEntity {
     public void markFailed() {
         this.status = OutboxStatus.FAILED;
     }
-
-    public enum OutboxStatus {
-        READY, SENT, FAILED
-    }
 }
