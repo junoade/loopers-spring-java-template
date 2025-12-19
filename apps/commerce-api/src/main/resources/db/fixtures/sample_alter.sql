@@ -12,3 +12,9 @@ ALTER TABLE product
     ADD INDEX idx_product_like_count (like_count DESC);
 
 create index idx_outbox_status on order_event_outbox(status);
+
+CREATE INDEX idx_outbox_ready_retry
+    ON event_outbox (status, next_retry_at);
+
+CREATE INDEX idx_outbox_processing
+    ON event_outbox (status, processing_started_at);

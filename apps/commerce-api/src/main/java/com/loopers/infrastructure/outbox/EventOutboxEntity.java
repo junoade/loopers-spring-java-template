@@ -34,6 +34,12 @@ public class EventOutboxEntity {
     private Instant occurredAt;
     private Instant sentAt;
 
+    @Column(nullable = false)
+    private int retryCount;
+
+    private Instant processingStartedAt;
+    private Instant nextRetryAt;
+
     public static EventOutboxEntity ready(
             String eventType,
             AggregateType aggregateType,
@@ -48,7 +54,12 @@ public class EventOutboxEntity {
         e.payload = payload;
         e.status = OutboxStatus.READY;
         e.occurredAt = occurredAt;
+        e.nextRetryAt = occurredAt;
         return e;
+    }
+
+    public void markPending() {
+        this.status = OutboxStatus.PENDING;
     }
 
     public void markSent() {
@@ -58,5 +69,18 @@ public class EventOutboxEntity {
 
     public void markFailed() {
         this.status = OutboxStatus.FAILED;
+        this.retryCount++;
+        long backOffSeconds = calcBackoffSeconds(retryCount);
+        this.nextRetryAt = Instant.now().plusSeconds(backOffSeconds);
+    }
+
+    private long calcBackoffSeconds(int retry) {
+        return switch (retry) {
+            case 1 -> 3;
+            case 2 -> 10;
+            case 3 -> 30;
+            case 4 -> 60;
+            default -> 120;
+        };
     }
 }

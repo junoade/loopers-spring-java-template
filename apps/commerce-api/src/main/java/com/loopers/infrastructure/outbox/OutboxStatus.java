@@ -1,5 +1,5 @@
 package com.loopers.infrastructure.outbox;
 
 public enum OutboxStatus {
-    READY, SENT, FAILED
+    READY, PENDING, SENT, FAILED
 }
