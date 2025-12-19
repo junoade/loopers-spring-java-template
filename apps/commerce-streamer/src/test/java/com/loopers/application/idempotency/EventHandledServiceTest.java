@@ -39,6 +39,7 @@ class EventHandledServiceTest {
         kafkaTemplate.send("product-like-events", String.valueOf(productId), payload);
 
         // 컨슈머 처리 대기
+        // TODO - 카프카 브로커/컨슈머 테스트환경에서 설정필요
         Thread.sleep(1500);
 
 
