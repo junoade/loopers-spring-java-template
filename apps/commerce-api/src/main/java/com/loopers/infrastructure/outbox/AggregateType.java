@@ -2,7 +2,7 @@ package com.loopers.infrastructure.outbox;
 
 public enum AggregateType {
     ORDER("order-events"),
-    PRODUCT_LIKE("like-events");
+    PRODUCT_LIKE("product-like-events");
 
     private final String topic;
 
