@@ -1,9 +1,10 @@
 package com.loopers.application.order.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loopers.infrastructure.outbox.OrderEventOutboxEntity;
+import com.loopers.infrastructure.outbox.AggregateType;
+import com.loopers.infrastructure.outbox.EventOutboxEntity;
 import com.loopers.domain.order.event.OrderEventPayload;
-import com.loopers.infrastructure.outbox.OrderEventOutboxRepository;
+import com.loopers.infrastructure.outbox.EventOutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import java.time.Instant;
 @Component
 @RequiredArgsConstructor
 public class OrderEventOutboxListener {
-    private final OrderEventOutboxRepository outboxRepository;
+    private final EventOutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
 
     /**
@@ -31,9 +32,9 @@ public class OrderEventOutboxListener {
         try {
             String json = objectMapper.writeValueAsString(payload);
 
-            OrderEventOutboxEntity entity = OrderEventOutboxEntity.ready(
+            EventOutboxEntity entity = EventOutboxEntity.ready(
                     payload.eventType().name(),
-                    "ORDER",
+                    AggregateType.ORDER,
                     payload.orderId().toString(),
                     json,
                     payload.occurredAt() != null ? payload.occurredAt() : Instant.now()

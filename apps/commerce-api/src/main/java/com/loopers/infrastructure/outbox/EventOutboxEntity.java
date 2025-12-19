@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 
 @Entity
-@Table(name = "order_event_outbox")
+@Table(name = "event_outbox")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderEventOutboxEntity {
+public class EventOutboxEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,8 @@ public class OrderEventOutboxEntity {
      * @ref OrderEventType
      */
     private String eventType;
-    private String aggregateType;  // "ORDER"
+    @Enumerated(EnumType.STRING)
+    private AggregateType aggregateType;  // "ORDER"
     private String aggregateId;    // orderId
 
     @Lob
@@ -33,14 +34,14 @@ public class OrderEventOutboxEntity {
     private Instant occurredAt;
     private Instant sentAt;
 
-    public static OrderEventOutboxEntity ready(
+    public static EventOutboxEntity ready(
             String eventType,
-            String aggregateType,
+            AggregateType aggregateType,
             String aggregateId,
             String payload,
             Instant occurredAt
     ) {
-        OrderEventOutboxEntity e = new OrderEventOutboxEntity();
+        EventOutboxEntity e = new EventOutboxEntity();
         e.eventType = eventType;
         e.aggregateType = aggregateType;
         e.aggregateId = aggregateId;

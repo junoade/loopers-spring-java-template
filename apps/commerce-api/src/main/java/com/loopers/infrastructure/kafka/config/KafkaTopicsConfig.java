@@ -26,4 +26,12 @@ public class KafkaTopicsConfig {
                 .build();
     }
 
+    @Bean
+    public NewTopic productLikeEventsTopic() {
+        return TopicBuilder.name("like-events")
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
+
 }
