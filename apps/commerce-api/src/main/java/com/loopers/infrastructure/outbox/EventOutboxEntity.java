@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 
 @Entity
-@Table(name = "order_event_outbox")
+@Table(name = "event_outbox")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderEventOutboxEntity {
+public class EventOutboxEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,8 @@ public class OrderEventOutboxEntity {
      * @ref OrderEventType
      */
     private String eventType;
-    private String aggregateType;  // "ORDER"
+    @Enumerated(EnumType.STRING)
+    private AggregateType aggregateType;  // "ORDER"
     private String aggregateId;    // orderId
 
     @Lob
@@ -33,21 +34,32 @@ public class OrderEventOutboxEntity {
     private Instant occurredAt;
     private Instant sentAt;
 
-    public static OrderEventOutboxEntity ready(
+    @Column(nullable = false)
+    private int retryCount;
+
+    private Instant processingStartedAt;
+    private Instant nextRetryAt;
+
+    public static EventOutboxEntity ready(
             String eventType,
-            String aggregateType,
+            AggregateType aggregateType,
             String aggregateId,
             String payload,
             Instant occurredAt
     ) {
-        OrderEventOutboxEntity e = new OrderEventOutboxEntity();
+        EventOutboxEntity e = new EventOutboxEntity();
         e.eventType = eventType;
         e.aggregateType = aggregateType;
         e.aggregateId = aggregateId;
         e.payload = payload;
         e.status = OutboxStatus.READY;
         e.occurredAt = occurredAt;
+        e.nextRetryAt = occurredAt;
         return e;
+    }
+
+    public void markPending() {
+        this.status = OutboxStatus.PENDING;
     }
 
     public void markSent() {
@@ -57,9 +69,18 @@ public class OrderEventOutboxEntity {
 
     public void markFailed() {
         this.status = OutboxStatus.FAILED;
+        this.retryCount++;
+        long backOffSeconds = calcBackoffSeconds(retryCount);
+        this.nextRetryAt = Instant.now().plusSeconds(backOffSeconds);
     }
 
-    public enum OutboxStatus {
-        READY, SENT, FAILED
+    private long calcBackoffSeconds(int retry) {
+        return switch (retry) {
+            case 1 -> 3;
+            case 2 -> 10;
+            case 3 -> 30;
+            case 4 -> 60;
+            default -> 120;
+        };
     }
 }
