@@ -37,7 +37,7 @@ public interface EventOutboxRepository extends JpaRepository<EventOutboxEntity, 
        set e.status = 'READY',
            e.processingStartedAt = null,
            e.nextRetryAt = :now
-     where e.status = 'PROCESSING'
+     where e.status = 'PENDING'
        and e.processingStartedAt < :stuckBefore
     """)
     int recoverStuckPending(@Param("stuckBefore") Instant stuckBefore,

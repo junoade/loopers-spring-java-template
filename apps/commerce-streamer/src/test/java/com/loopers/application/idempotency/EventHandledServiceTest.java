@@ -48,7 +48,7 @@ class EventHandledServiceTest {
         long after = metricsRepo.findById(productId).orElseThrow().getLikeCount();
         assertThat(after).isEqualTo(before + 1);
 
-        long handledCount = handledRepo.countByConsumerNameAndEventId("product-like-metrics", "e-123");
+        long handledCount = handledRepo.countByConsumerNameAndEventId("product-like-metrics", "06b9f00c-04bb-40fb-a96c-a9da5d0ede53");
         assertThat(handledCount).isEqualTo(1);
     }
 
