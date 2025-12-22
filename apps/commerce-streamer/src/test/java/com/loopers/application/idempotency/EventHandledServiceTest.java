@@ -3,18 +3,31 @@ package com.loopers.application.idempotency;
 import com.loopers.domain.ProductLikeMetricsModel;
 import com.loopers.infrastructure.EventHandleRepository;
 import com.loopers.infrastructure.ProductLikeMetricsRepository;
+import com.loopers.testcontainers.KafkaTestContainersConfig;
+import com.loopers.utils.KafkaCleanUp;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@Testcontainers
+@ActiveProfiles("local")
+@Import(KafkaTestContainersConfig.class)
 @SpringBootTest
 class EventHandledServiceTest {
+
+    @Autowired
+    private KafkaCleanUp kafkaCleanUp;
+
     @Autowired
     KafkaTemplate<Object,Object> kafkaTemplate;
     @Autowired
@@ -22,9 +35,20 @@ class EventHandledServiceTest {
     @Autowired
     EventHandleRepository handledRepo;
 
+    @Autowired
+    private KafkaProperties kafkaProperties;
+
+    @BeforeEach
+    void setUp() {
+        // @BeforeEach는 이미 SpringBootTest 컨텍스트 + KafkaListener 컨테이너가 다 올라간 뒤에 실행
+        // kafkaCleanUp.resetAllTestTopics();
+        kafkaCleanUp.resetAllConsumerGroups();
+    }
+
     @Test
     @DisplayName("멱등성 테스트")
     void duplicate_message_should_be_applied_once() throws Exception {
+
         long productId = 1L;
         ProductLikeMetricsModel metrics = metricsRepo.findById(productId)
                 .orElseGet(() -> metricsRepo.save(ProductLikeMetricsModel.of(productId)));
@@ -41,6 +65,9 @@ class EventHandledServiceTest {
         // 컨슈머 처리 대기
         // TODO - 카프카 브로커/컨슈머 테스트환경에서 설정필요
         Thread.sleep(1500);
+
+        Map<String, Object> consumerProps = kafkaProperties.buildConsumerProperties();
+        consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, "${spring.kafka.consumer.group-id}");
 
 
         // then
