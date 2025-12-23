@@ -28,8 +28,7 @@ public class RankingAggregationService {
         // Score = Weight * 1
         redisTemplate.opsForZSet().incrementScore(key, member, LIKE_WEIGHT);
 
-        // test 설정
-        redisTemplate.expire(key, TTL);
+        setTTLOnlyOnce(key);
     }
 
     /**
@@ -67,5 +66,12 @@ public class RankingAggregationService {
             connection.expire(target, TTL.getSeconds());
             return result;
         });
+    }
+
+    private void setTTLOnlyOnce(String key) {
+        Boolean exists = redisTemplate.hasKey(key);
+        if (Boolean.FALSE.equals(exists)) {
+            redisTemplate.expire(key, TTL);
+        }
     }
 }
