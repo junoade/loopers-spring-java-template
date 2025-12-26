@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 /**
@@ -39,4 +40,21 @@ public class RankingZSetRepository {
         }
         return result;
     }
+
+    /**
+     * 해당 상품의 순위가 함께 반환 합니다.
+     *  - 순위에 없다면 null
+     * @param date
+     * @param productId
+     * @return
+     */
+    public OptionalDouble findDailyRanking(LocalDate date, Long productId) {
+        String key = RankingKey.dailyAll(date);
+        String member = String.valueOf(productId);
+        Double score = redisTemplate.opsForZSet().score(key, member);
+        return score == null
+                ? OptionalDouble.empty()
+                : OptionalDouble.of(score);
+    }
+
 }

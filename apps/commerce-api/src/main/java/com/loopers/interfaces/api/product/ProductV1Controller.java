@@ -2,7 +2,9 @@ package com.loopers.interfaces.api.product;
 
 import com.loopers.application.product.ProductLikeSummary;
 import com.loopers.application.product.ProductQueryService;
+import com.loopers.application.ranking.RankingQueryService;
 import com.loopers.domain.product.ProductSortType;
+import com.loopers.ranking.RankingEntry;
 import com.loopers.support.tracking.general.UserActionType;
 import com.loopers.interfaces.api.ApiResponse;
 import com.loopers.support.tracking.annotation.TrackUserAction;
@@ -12,11 +14,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.OptionalDouble;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductV1Controller implements ProductV1ApiSpec{
     private final ProductQueryService productQueryService;
+    private final RankingQueryService rankingQueryService;
 
     @Override
     @GetMapping
@@ -41,7 +46,7 @@ public class ProductV1Controller implements ProductV1ApiSpec{
     )
     public ApiResponse<ProductV1Dto.ProductDetailResponse<ProductLikeSummary>> getProductDetail(@PathVariable("productId") Long productId) {
         ProductLikeSummary productLikeSummary = productQueryService.getProductLikeSummary(productId);
-
-        return ApiResponse.success(ProductV1Dto.ProductDetailResponse.of(productLikeSummary));
+        OptionalDouble rankingEntry = rankingQueryService.getDailyRankingScore(productId);
+        return ApiResponse.success(ProductV1Dto.ProductDetailResponse.of(productLikeSummary, rankingEntry));
     }
 }
