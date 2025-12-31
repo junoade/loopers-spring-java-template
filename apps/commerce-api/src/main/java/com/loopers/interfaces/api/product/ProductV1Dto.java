@@ -1,8 +1,10 @@
 package com.loopers.interfaces.api.product;
 
+import com.loopers.ranking.RankingEntry;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.OptionalDouble;
 
 public class ProductV1Dto {
 
@@ -28,10 +30,15 @@ public class ProductV1Dto {
     }
 
     public record ProductDetailResponse<T>(
-            T content
+            T content,
+            OptionalDouble rankingScore
     ){
         static <T> ProductDetailResponse<T> of(T content) {
-            return new ProductDetailResponse<>(content);
+            return new ProductDetailResponse<>(content, null);
+        }
+
+        static <T> ProductDetailResponse<T> of(T content, OptionalDouble rankingScore) {
+            return new ProductDetailResponse<>(content, rankingScore);
         }
     }
 }

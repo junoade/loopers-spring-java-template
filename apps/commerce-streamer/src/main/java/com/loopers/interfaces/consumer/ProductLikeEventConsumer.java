@@ -3,6 +3,7 @@ package com.loopers.interfaces.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopers.application.idempotency.EventHandledService;
 import com.loopers.application.metrics.MetricsAggregationService;
+import com.loopers.application.ranking.RankingAggregationService;
 import com.loopers.contract.event.ProductLikeEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class ProductLikeEventConsumer {
     private final ObjectMapper objectMapper;
     private final EventHandledService eventHandledService;
     private final MetricsAggregationService metricsAggregationService;
+    private final RankingAggregationService rankingAggregationService;
 
     @KafkaListener(topics = "product-like-events", groupId = "${spring.kafka.consumer.group-id}")
     public void consume( @Header(KafkaHeaders.RECEIVED_KEY) String key,
@@ -42,6 +44,7 @@ public class ProductLikeEventConsumer {
         }
 
         metricsAggregationService.handleProductLiked(event.productId());
+        rankingAggregationService.applyLike(event.productId(), event.occurredAt());
 
         ack.acknowledge();
     }

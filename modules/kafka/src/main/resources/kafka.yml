@@ -15,6 +15,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       retries: 3
+      ## TODO acks, enable.idempotence, max.in.flight.requests.per.connection 설정 등 공부하기
     consumer:
       group-id: loopers-default-consumer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -29,10 +30,13 @@ spring.config.activate.on-profile: local, test
 
 spring:
   kafka:
-    bootstrap-servers: localhost:19092
+    # Testcontainers를 사용하는 경우 BOOTSTRAP_SERVERS가 자동으로 설정됨
+    # 로컬 개발 환경에서는 localhost:19092 사용
+    bootstrap-servers: ${BOOTSTRAP_SERVERS:localhost:19092}
     admin:
       properties:
-        bootstrap.servers: kafka:9092
+        bootstrap.servers: ${BOOTSTRAP_SERVERS:localhost:19092}
+      auto-create: true
 
 ---
 spring.config.activate.on-profile: dev
