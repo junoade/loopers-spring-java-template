@@ -1,9 +1,10 @@
 package com.loopers.batch.job.rankWeekly.step.dto;
 
-public record WeeklyAggRow (
-        String yearWeek, // e.g. 2026-W01
+public record WeeklyRankRow(
+        String yearWeek,
         Long productId,
         long viewCount,
         long likeCount,
-        long orderCount
+        long orderCount,
+        double score
 ) { }

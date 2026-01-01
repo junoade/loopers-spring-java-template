@@ -2,6 +2,7 @@ package com.loopers.batch.job.rankWeekly;
 
 import com.loopers.batch.job.rankWeekly.step.RankWeeklyProcessor;
 import com.loopers.batch.job.rankWeekly.step.dto.WeeklyAggRow;
+import com.loopers.batch.job.rankWeekly.step.dto.WeeklyRankRow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -36,10 +37,10 @@ public class RankWeeklyJobConfig {
             PlatformTransactionManager transactionManager,
             JdbcPagingItemReader<WeeklyAggRow> weeklyAggReader,
             RankWeeklyProcessor processor,
-            JdbcBatchItemWriter<WeeklyAggRow> weeklyMvUpsertWriter
+            JdbcBatchItemWriter<WeeklyRankRow> weeklyMvUpsertWriter
     ) {
         return new StepBuilder("rankWeeklyMvStep", jobRepository)
-                .<WeeklyAggRow, WeeklyAggRow>chunk(1000, transactionManager)
+                .<WeeklyAggRow, WeeklyRankRow>chunk(1000, transactionManager)
                 .reader(weeklyAggReader)
                 .processor(processor)
                 .writer(weeklyMvUpsertWriter)
