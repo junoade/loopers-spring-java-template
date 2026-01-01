@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "product_metrics")
@@ -23,21 +23,21 @@ public class ProductMetricsModel {
     private long count;
 
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "UPDATED_AT", nullable = false)
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        Instant now = Instant.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
         this.createdAt = now;
         this.updatedAt = now;
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = Instant.now();
+        this.updatedAt = LocalDateTime.now(ZoneId.systemDefault());
     }
 
     public static ProductMetricsModel of(ProductMetricsId id) {
