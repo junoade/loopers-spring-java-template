@@ -27,6 +27,9 @@ public class ProductRankWeekly {
     @Column(name = "order_count", nullable = false)
     private long orderCount;
 
+    @Column(name = "score", nullable = false)
+    private double score;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
