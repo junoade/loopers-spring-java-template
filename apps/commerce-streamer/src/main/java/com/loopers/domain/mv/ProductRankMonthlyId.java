@@ -13,8 +13,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class ProductRankMonthlyId implements Serializable {
 
-    @Column(name = "year_month", length = 10, nullable = false)
-    private String yearMonth; // e.g. 2026-01 or 202601
+    @Column(name = "year_month_key", length = 8, nullable = false)
+    private String yearMonth; // e.g. 202601
 
     @Column(name = "product_id", nullable = false)
     private Long productId;

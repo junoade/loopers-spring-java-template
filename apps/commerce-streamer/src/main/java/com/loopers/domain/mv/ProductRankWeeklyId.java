@@ -13,7 +13,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class ProductRankWeeklyId implements Serializable {
 
-    @Column(name = "year_week", length = 10, nullable = false)
+    @Column(name = "year_week_key", length = 10, nullable = false)
     private String yearWeek; // e.g. 2026-W01
 
     @Column(name = "product_id", nullable = false)
