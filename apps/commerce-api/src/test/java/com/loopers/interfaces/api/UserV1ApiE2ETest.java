@@ -70,7 +70,7 @@ class UserV1ApiE2ETest {
             String email = "loopers@loopers.com";
             String birthDate = "1997-09-28";
             String gender = "M";
-            Integer point = 50;
+            Long point = 50L;
             someUserModel = new UserModel(userId, userName, description, email, birthDate, gender, point);
         }
 
@@ -193,7 +193,7 @@ class UserV1ApiE2ETest {
                     "loopers@loopers.com",
                     "1997-09-28",
                     "M",
-                    0
+                    0L
             );
 
             // var json = objectMapper.writeValueAsString(request);
@@ -231,7 +231,7 @@ class UserV1ApiE2ETest {
                     "loopers@loopers.com",
                     "1997-09-28",
                     "",
-                    0
+                    0L
             );
 
             // when
@@ -270,7 +270,7 @@ class UserV1ApiE2ETest {
             String email = "loopers@loopers.com";
             String birthDate = "1997-09-28";
             String gender = "M";
-            Integer point = 50;
+            Long point = 50L;
             someUserModel = new UserModel(userId, userName, description, email, birthDate, gender, point);
         }
 
@@ -279,7 +279,7 @@ class UserV1ApiE2ETest {
         public void returnUserTotalPoint_whenSuccessful() {
             // given
             userJpaRepository.save(someUserModel);
-            int point = 1000;
+            long point = 1000L;
             UserV1Dto.UserPointChargeRequest request = new UserV1Dto.UserPointChargeRequest(
                     someUserModel.getUserId(), point
             );
@@ -310,7 +310,7 @@ class UserV1ApiE2ETest {
         @Test
         void throwsException_whenUserNotFound() {
             // given
-            int point = 1000;
+            long point = 1000L;
             UserV1Dto.UserPointChargeRequest request = new UserV1Dto.UserPointChargeRequest(
                     someUserModel.getUserId(), point
             );
