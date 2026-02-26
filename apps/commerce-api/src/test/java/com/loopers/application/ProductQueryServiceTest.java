@@ -61,9 +61,9 @@ public class ProductQueryServiceTest {
                 new ProductModel("상품2", "카테고리", 20_000, 100, ProductStatus.ON_SALE, brand)
         );
 
-        UserModel u1 = userRepository.save(new UserModel("user1", "u1", "유저1", "u1@test.com", "1997-01-01", "M", 100_000));
-        UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000));
-        UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000));
+        UserModel u1 = userRepository.save(new UserModel("user1", "u1", "유저1", "u1@test.com", "1997-01-01", "M", 100_000L));
+        UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000L));
+        UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000L));
 
         productLikeService.userLikeProduct(new LikeCommand.Like(u1.getUserId(), p1.getId()));
         productLikeService.userLikeProduct(new LikeCommand.Like(u2.getUserId(), p1.getId()));
@@ -111,9 +111,9 @@ public class ProductQueryServiceTest {
                 new ProductModel("상품2", "카테고리", 20_000, 100, ProductStatus.ON_SALE, brand)
         );
 
-        UserModel u1 = userRepository.save(new UserModel("user1", "u1", "유저1", "u1@test.com", "1997-01-01", "M", 100_000));
-        UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000));
-        UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000));
+        UserModel u1 = userRepository.save(new UserModel("user1", "u1", "유저1", "u1@test.com", "1997-01-01", "M", 100_000L));
+        UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000L));
+        UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000L));
 
         productLikeService.userLikeProduct(new LikeCommand.Like(u1.getUserId(), p1.getId()));
 
@@ -155,9 +155,9 @@ public class ProductQueryServiceTest {
                 new ProductModel("상품2", "카테고리", 20_000, 100, ProductStatus.ON_SALE, brand)
         );
 
-        UserModel u1 = userRepository.save(new UserModel("user1", "u1", "유저1", "u1@test.com", "1997-01-01", "M", 100_000));
-        UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000));
-        UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000));
+        UserModel u1 = userRepository.save(new UserModel("user1", "u1", "유저1", "u1@test.com", "1997-01-01", "M", 100_000L));
+        UserModel u2 = userRepository.save(new UserModel("user2", "u2", "유저2", "u2@test.com", "1997-01-01", "M", 100_000L));
+        UserModel u3 = userRepository.save(new UserModel("user3", "u3", "유저3", "u3@test.com", "1997-01-01", "M", 100_000L));
 
         productLikeService.userLikeProduct(new LikeCommand.Like(u1.getUserId(), p1.getId()));
         productLikeService.userLikeProduct(new LikeCommand.Like(u2.getUserId(), p2.getId()));

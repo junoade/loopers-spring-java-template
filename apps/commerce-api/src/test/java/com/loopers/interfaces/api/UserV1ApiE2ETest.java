@@ -137,7 +137,7 @@ class UserV1ApiE2ETest {
             headers.add("X-USER-ID", someUserModel.getUserId());
 
             //when
-            ResponseEntity<ApiResponse<Integer>> response =
+            ResponseEntity<ApiResponse<Long>> response =
                     testRestTemplate.exchange(ENDPOINT_GETUSER_POINT.apply(someUserModel.getUserId()),
                             HttpMethod.GET,
                             new HttpEntity<>(headers),
@@ -285,7 +285,7 @@ class UserV1ApiE2ETest {
             );
 
             // when
-            ResponseEntity<ApiResponse<Integer>> response =
+            ResponseEntity<ApiResponse<Long>> response =
                     testRestTemplate.exchange(
                             ENDPOINT_CHARGEPOINT,
                             HttpMethod.PUT,

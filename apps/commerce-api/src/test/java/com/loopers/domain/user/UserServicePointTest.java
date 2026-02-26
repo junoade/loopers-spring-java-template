@@ -37,7 +37,7 @@ public class UserServicePointTest {
         String email = "loopers@loopers.com";
         String birthDate = "1997-09-28";
         String gender = "M";
-        Integer points = 1000;
+        Long points = 1000L;
         userModel = new UserModel(userId, userName, description, email, birthDate, gender, points);
     }
 
@@ -50,7 +50,7 @@ public class UserServicePointTest {
                 .willReturn(Optional.of(userModel));
 
         // when
-        Integer points = userService.getUserOrNull(userModel.getUserId()).getPoint();
+        Long points = userService.getUserOrNull(userModel.getUserId()).getPoint();
 
         // then
         // 상태와 행위검증
@@ -78,7 +78,7 @@ public class UserServicePointTest {
     void throwBadRequestException_whenChargePointUserDoesNotExist() {
         // given
         String userId = "unknown";
-        int point = 500;
+        long point = 500L;
         given(userRepository.findByUserId(userId))
                 .willReturn(Optional.empty());
 
@@ -97,14 +97,14 @@ public class UserServicePointTest {
     void doChargePoint_whenUserExists() {
         // given
         String userId = userModel.getUserId();
-        int originalPoint = userModel.getPoint();
-        int newPoint = 500;
+        long originalPoint = userModel.getPoint();
+        long newPoint = 500;
         given(userRepository.findByUserId(userId))
                 .willReturn(Optional.of(userModel));
 
         // when
         ArgumentCaptor<UserModel> userCaptor = ArgumentCaptor.forClass(UserModel.class);
-        Integer afterPoint = userService.chargePoint(userId, newPoint);
+        Long afterPoint = userService.chargePoint(userId, newPoint);
 
         // then
         assertThat(afterPoint).isEqualTo(originalPoint + newPoint); // 상태

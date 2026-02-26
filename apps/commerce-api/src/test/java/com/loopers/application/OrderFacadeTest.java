@@ -46,7 +46,7 @@ public class OrderFacadeTest {
     BrandModel brand;
     ProductModel product;
 
-    private static final int INIT_POINT = 1_000;
+    private static final long INIT_POINT = 1_000L;
 
     @BeforeEach
     void setUp() {
@@ -92,6 +92,7 @@ public class OrderFacadeTest {
                 user.getUserId(),
                 List.of(line),
                 PaymentFlowType.POINT_ONLY,
+                null,
                 null
         );
 
@@ -127,6 +128,7 @@ public class OrderFacadeTest {
                 resultUser.getUserId(),
                 List.of(line),
                 PaymentFlowType.POINT_ONLY,
+                null,
                 null
         );
 
@@ -164,6 +166,7 @@ public class OrderFacadeTest {
                 resultUser.getUserId(),
                 List.of(line),
                 PaymentFlowType.POINT_ONLY,
+                null,
                 null
         );
 
