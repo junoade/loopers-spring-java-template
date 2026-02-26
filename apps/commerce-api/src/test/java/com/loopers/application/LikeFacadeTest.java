@@ -40,7 +40,7 @@ public class LikeFacadeTest {
     @Autowired
     private DatabaseCleanUp databaseCleanUp;
 
-    static final int INIT_POINT = 1000;
+    static final long INIT_POINT = 1000;
 
     UserModel user;
     BrandModel brand;

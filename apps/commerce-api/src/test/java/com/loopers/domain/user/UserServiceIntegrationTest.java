@@ -7,16 +7,12 @@ import com.loopers.utils.DatabaseCleanUp;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserServiceIntegrationTest {
@@ -53,7 +49,7 @@ class UserServiceIntegrationTest {
         private String email;
         private String birthDate;
         private String gender;
-        private Integer newUserPointPolicy;
+        private Long newUserPointPolicy;
         private UserCommand.Create createCommand;
 
         @BeforeEach
@@ -64,7 +60,7 @@ class UserServiceIntegrationTest {
             email = "loopers@loopers.com";
             birthDate = "1997-09-28";
             gender = "M";
-            newUserPointPolicy = 0;
+            newUserPointPolicy = 0L;
             createCommand = new UserCommand.Create(userId, userName, description,
                     email, birthDate, gender, newUserPointPolicy);
         }

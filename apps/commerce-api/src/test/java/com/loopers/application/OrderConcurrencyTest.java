@@ -69,7 +69,7 @@ public class OrderConcurrencyTest {
     @Test
     @DisplayName("포인트 동시성 테스트 - 동일한 유저가, 서로 다른 주문을 동시에 수행하는 경우")
     void concurrencyTest_sameUserOrdersThenPointsDeductedExactlyOnceEach() throws Exception {
-        int initPoint = 100_000;
+        long initPoint = 100_000;
         int orderPrice = 5_000;
         int tryCount = 5;
 
@@ -112,6 +112,7 @@ public class OrderConcurrencyTest {
                             user.getUserId(),
                             List.of(line),
                             PaymentFlowType.POINT_ONLY,
+                            null,
                             null
                     );
 
@@ -136,7 +137,7 @@ public class OrderConcurrencyTest {
 
         // then
         UserModel reloaded = userRepository.findById(user.getId()).orElseThrow();
-        int expectedPoint = initPoint - (successCount.get() * orderPrice);
+        long expectedPoint = initPoint - ((long) successCount.get() * orderPrice);
 
         assertThat(reloaded.getPoint()).isEqualTo(expectedPoint);
         assertThat(reloaded.getPoint()).isGreaterThanOrEqualTo(0);
@@ -147,7 +148,7 @@ public class OrderConcurrencyTest {
     void concurrencyTest_orderSameProductThenStockDecreaseCorrectly() throws Exception {
         int initStock = 30;
         int orderQty = 1;
-        int initPoint = 100_000;
+        long initPoint = 100_000;
         int productPrice = 5_000;
         int tryCount = 5;
 
@@ -190,6 +191,7 @@ public class OrderConcurrencyTest {
                             user1.getUserId(),
                             List.of(line),
                             PaymentFlowType.POINT_ONLY,
+                            null,
                             null
                     );
 
@@ -227,7 +229,7 @@ public class OrderConcurrencyTest {
         // given
         int initStock = 10;
         int orderQty = 1;
-        int initPoint = 100_000;
+        long initPoint = 100_000;
         int productPrice = 5_000;
 
         int userCount = 10;   // 유저/쓰레드 수
@@ -293,6 +295,7 @@ public class OrderConcurrencyTest {
                             userId,
                             List.of(line),
                             PaymentFlowType.POINT_ONLY,
+                            null,
                             null
                     );
 

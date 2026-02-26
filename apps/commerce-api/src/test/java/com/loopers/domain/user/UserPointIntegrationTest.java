@@ -30,7 +30,7 @@ public class UserPointIntegrationTest {
         String email = "loopers@loopers.com";
         String birthDate = "1997-09-28";
         String gender = "M";
-        Integer point = 1000;
+        long point = 1000;
         userModel = new UserModel(userId, userName, description, email, birthDate, gender, point);
     }
 

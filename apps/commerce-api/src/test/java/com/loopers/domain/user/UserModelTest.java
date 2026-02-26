@@ -2,7 +2,6 @@ package com.loopers.domain.user;
 
 import com.loopers.support.error.CoreException;
 import com.loopers.support.error.ErrorType;
-import jakarta.persistence.Column;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -235,12 +234,12 @@ class UserModelTest {
             String email = "ajchoi0928@loopers.com";
             String birthDate = "1997-09-28";
             String gender = "M";
-            Integer point = 0;
+            long point = 0;
 
             // when
             UserModel userModel = new UserModel(userId, userName, description, email, birthDate, gender, point);
             CoreException result = assertThrows(CoreException.class, () -> {
-                userModel.updatePoint(-1);
+                userModel.updatePoint(-1L);
             });
 
             // then
@@ -258,7 +257,7 @@ class UserModelTest {
             String email = "ajchoi0928@loopers.com";
             String birthDate = "1997-09-28";
             String gender = "M";
-            Integer point = -1;
+            long point = -1;
 
             // when
             CoreException result = assertThrows(CoreException.class, () ->

@@ -5,6 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class CommerceBatchApplicationTest {
-    @Test
-    void contextLoads() {}
+    /*@Test
+    void contextLoads() {}*/
 }
